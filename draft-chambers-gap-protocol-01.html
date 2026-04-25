@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GAP v1.4.1 Internet-Draft - Generic Authorization Protocol</title>
+    <style>
+        :root { color-scheme: light only; }
+
+        body {
+            font-family: Cambria, serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #000000;
+            background: #ffffff;
+            max-width: 816px;
+            margin: 0 auto;
+            padding: 72px;
+        }
+
+        h1 { font-size: 22pt; font-weight: bold; margin-top: 24pt; margin-bottom: 6pt; line-height: 1.3; color: #1a1a1a; }
+        h2 { font-size: 16pt; font-weight: bold; margin-top: 20pt; margin-bottom: 6pt; line-height: 1.3; color: #1a1a1a; }
+        h3 { font-size: 13pt; font-weight: bold; margin-top: 14pt; margin-bottom: 6pt; line-height: 1.3; color: #1a1a1a; }
+        h4 { font-size: 11pt; font-weight: bold; margin-top: 12pt; margin-bottom: 4pt; line-height: 1.3; color: #1a1a1a; }
+
+        p { margin-top: 0; margin-bottom: 6pt; }
+
+        table { border-collapse: collapse; width: 100%; margin-top: 12pt; margin-bottom: 12pt; }
+        th, td { border: 1px solid #999999; padding: 5px 8px; text-align: left; vertical-align: top; font-size: 10pt; }
+        th { font-weight: bold; background-color: #e8eef7; }
+
+        ul, ol { margin-top: 6pt; margin-bottom: 6pt; padding-left: 36px; }
+        li { margin-bottom: 3pt; }
+
+        pre {
+            font-family: Consolas, monospace;
+            font-size: 9pt;
+            background-color: #f5f5f5;
+            border: 1px solid #cccccc;
+            padding: 10px 12px;
+            margin: 10pt 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+            font-size: 9pt;
+            background-color: #f5f5f5;
+            padding: 1px 3px;
+        }
+
+        .doc-header {
+            margin-bottom: 18pt;
+            border-bottom: 2px solid #2b5797;
+            padding-bottom: 12pt;
+        }
+
+        .doc-header table {
+            border: none;
+            margin: 0;
+            width: 100%;
+        }
+        .doc-header td {
+            border: none;
+            padding: 1px 4px;
+            font-size: 10pt;
+            vertical-align: top;
+        }
+        .doc-header .left-col { width: 50%; }
+        .doc-header .right-col { width: 50%; text-align: right; }
+
+        .doc-title {
+            font-family: Cambria, serif;
+            font-size: 22pt;
+            font-weight: bold;
+            color: #1a1a1a;
+            text-align: center;
+            margin-top: 18pt;
+            margin-bottom: 6pt;
+        }
+
+        .doc-subtitle {
+            font-size: 11pt;
+            text-align: center;
+            color: #333333;
+            margin-bottom: 18pt;
+        }
+
+        .abstract-label, .toc-label {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #2b5797;
+            margin-top: 18pt;
+            margin-bottom: 6pt;
+        }
+
+        .section-ref {
+            color: #2b5797;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .boilerplate {
+            font-size: 10pt;
+            color: #333333;
+            margin-bottom: 12pt;
+            line-height: 1.5;
+        }
+
+        .toc-entry {
+            margin-bottom: 2pt;
+            font-size: 10pt;
+        }
+        .toc-entry-sub {
+            margin-bottom: 2pt;
+            font-size: 10pt;
+            padding-left: 18px;
+        }
+        .toc-entry-subsub {
+            margin-bottom: 2pt;
+            font-size: 10pt;
+            padding-left: 36px;
+        }
+
+        .keyword { font-weight: bold; }
+
+        .callout {
+            border: 1px solid #cccccc;
+            border-left: 3px solid #2b5797;
+            background-color: #e8eef7;
+            padding: 10px 12px;
+            margin: 12pt 0;
+        }
+        .callout-label {
+            font-weight: bold;
+            margin-bottom: 3pt;
+        }
+
+        .change-table th { font-size: 9pt; }
+        .change-table td { font-size: 9pt; }
+
+        @media print { body { padding: 0; max-width: none; } }
+    </style>
+</head>
+<body data-id="0">
+
+<!-- ============================================================ -->
+<!-- DOCUMENT HEADER -->
+<!-- ============================================================ -->
+
+<div data-id="1" class="doc-header">
+    <table data-id="2">
+        <tr data-id="3">
+            <td data-id="4" class="left-col">
+                Internet Engineering Task Force (IETF)<br data-id="5">
+                Internet-Draft<br data-id="6">
+                Intended status: Standards Track<br data-id="7">
+                Expires: October 2026
+            </td>
+            <td data-id="8" class="right-col">
+                S. Chambers<br data-id="9">
+                Independent<br data-id="10">
+                April 2026<br data-id="11">
+                draft-chambers-gap-protocol-01
+            </td>
+        </tr>
+    </table>
+</div>
+
+<p data-id="12" class="doc-title">Generic Authorization Protocol (GAP) v1.4.1</p>
+<p data-id="13" class="doc-subtitle">draft-chambers-gap-protocol-01</p>
+
+<!-- ============================================================ -->
+<!-- STATUS OF THIS MEMO -->
+<!-- ============================================================ -->
+
+<p data-id="14" class="abstract-label">Status of This Memo</p>
+
+<p data-id="15" class="boilerplate">This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79. Internet-Drafts are working documents of the Internet Engineering Task Force (IETF). Note that other groups may also distribute working documents as Internet-Drafts. The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
+
+<p data-id="16" class="boilerplate">Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time. It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+
+<p data-id="17" class="boilerplate">This Internet-Draft will expire on October 25, 2026.</p>
+
+<!-- ============================================================ -->
+<!-- COPYRIGHT NOTICE -->
+<!-- ============================================================ -->
+
+<p data-id="18" class="abstract-label">Copyright Notice</p>
+
+<p data-id="19" class="boilerplate">Copyright (c) 2026 IETF Trust and the persons identified as the document authors. All rights reserved.</p>
+
+<p data-id="20" class="boilerplate">This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document. Please review these documents carefully, as they describe your rights and restrictions with respect to this document.</p>
+
+<!-- ============================================================ -->
+<!-- ABSTRACT -->
+<!-- ============================================================ -->
+
+<p data-id="21" class="abstract-label">Abstract</p>
+
+<p data-id="22">The Generic Authorization Protocol (GAP) defines a framework for cryptographically binding, verifying, and enforcing authorization decisions for autonomous software agents. GAP addresses the problem of AI agents operating with unbounded or opaque permissions by requiring each agent action to carry a signed authorization envelope that includes the agent's identity, the target resource, the requested action, parameters, and a verifiable assurance level. The protocol supports both JSON Web Signature (JWS) and CBOR Object Signing and Encryption (COSE) signing formats, enabling deployment across both web-API and constrained-device environments. Version 1.4.1 introduces normative corrections for payload canonicalization, nonce entropy requirements, replay-window semantics, action-parameter constraints, assurance-level validation, algorithm agility, and updated signing-scope definitions. GAP is designed to interoperate with existing identity frameworks (OAuth 2.0, SPIFFE, X.509) without requiring replacement of deployed infrastructure.</p>
+
+<!-- ============================================================ -->
+<!-- TABLE OF CONTENTS -->
+<!-- ============================================================ -->
+
+<p data-id="23" class="abstract-label">Table of Contents</p>
+
+<p data-id="24" class="toc-entry">1. Introduction</p>
+<p data-id="25" class="toc-entry-sub">1.1. Changes from v1.4.0 to v1.4.1</p>
+<p data-id="26" class="toc-entry">2. Terminology</p>
+<p data-id="27" class="toc-entry-sub">2.1. Key Words</p>
+<p data-id="28" class="toc-entry-sub">2.2. Definitions</p>
+<p data-id="29" class="toc-entry">3. Protocol Overview</p>
+<p data-id="30" class="toc-entry-sub">3.1. Architecture</p>
+<p data-id="31" class="toc-entry-sub">3.2. Authorization Envelope Structure</p>
+<p data-id="32" class="toc-entry-sub">3.3. Protocol Flow</p>
+<p data-id="33" class="toc-entry">4. Canonicalization</p>
+<p data-id="34" class="toc-entry-sub">4.1. Requirement</p>
+<p data-id="35" class="toc-entry-sub">4.2. JSON Canonicalization Scheme (JCS)</p>
+<p data-id="36" class="toc-entry-sub">4.3. CBOR Canonicalization</p>
+<p data-id="37" class="toc-entry-sub">4.4. Canonicalization Scope</p>
+<p data-id="38" class="toc-entry">5. Signing and Verification</p>
+<p data-id="39" class="toc-entry-sub">5.1. General Requirements</p>
+<p data-id="40" class="toc-entry-sub">5.2. JWS Signing (RFC 7515)</p>
+<p data-id="41" class="toc-entry-subsub">5.2.1. Detached Payload Mode</p>
+<p data-id="42" class="toc-entry-subsub">5.2.2. JWS Header Requirements</p>
+<p data-id="43" class="toc-entry-subsub">5.2.3. JWS Signing Input</p>
+<p data-id="44" class="toc-entry-subsub">5.2.4. JWS Verification</p>
+<p data-id="45" class="toc-entry-sub">5.3. COSE Signing (RFC 9052)</p>
+<p data-id="46" class="toc-entry-subsub">5.3.1. COSE_Sign1 Structure</p>
+<p data-id="47" class="toc-entry-subsub">5.3.2. COSE Header Parameters</p>
+<p data-id="48" class="toc-entry-subsub">5.3.3. Sig_structure for COSE_Sign1</p>
+<p data-id="49" class="toc-entry-sub">5.4. Signing Scope</p>
+<p data-id="50" class="toc-entry">6. Action Parameters</p>
+<p data-id="51" class="toc-entry-sub">6.1. Structure</p>
+<p data-id="52" class="toc-entry-sub">6.2. Structural Constraints</p>
+<p data-id="53" class="toc-entry-sub">6.3. Validation Ordering</p>
+<p data-id="54" class="toc-entry">7. Assurance Levels</p>
+<p data-id="55" class="toc-entry-sub">7.1. Enumerated Values</p>
+<p data-id="56" class="toc-entry-sub">7.2. Validation Requirements</p>
+<p data-id="57" class="toc-entry-sub">7.3. Downgrade Resistance</p>
+<p data-id="58" class="toc-entry-sub">7.4. Minimum Assurance Policies</p>
+<p data-id="59" class="toc-entry">8. Nonce and Replay Protection</p>
+<p data-id="60" class="toc-entry-sub">8.1. Nonce Generation</p>
+<p data-id="61" class="toc-entry-sub">8.2. Replay Window</p>
+<p data-id="62" class="toc-entry-sub">8.3. Clock Skew Tolerance</p>
+<p data-id="63" class="toc-entry-sub">8.4. Distributed Replay Detection</p>
+<p data-id="64" class="toc-entry">9. Algorithm Agility</p>
+<p data-id="65" class="toc-entry-sub">9.1. Design Principles</p>
+<p data-id="66" class="toc-entry-sub">9.2. Algorithm Registry</p>
+<p data-id="67" class="toc-entry-sub">9.3. Mandatory-to-Implement Algorithms</p>
+<p data-id="68" class="toc-entry-sub">9.4. Algorithm Negotiation</p>
+<p data-id="69" class="toc-entry-sub">9.5. Deprecation Lifecycle</p>
+<p data-id="70" class="toc-entry-sub">9.6. Post-Quantum Considerations</p>
+<p data-id="71" class="toc-entry">10. Transport Binding</p>
+<p data-id="72" class="toc-entry-sub">10.1. HTTP Transport</p>
+<p data-id="73" class="toc-entry-sub">10.2. Error Responses</p>
+<p data-id="74" class="toc-entry">11. Security Considerations</p>
+<p data-id="75" class="toc-entry-sub">11.1. Threat Model</p>
+<p data-id="76" class="toc-entry-sub">11.2. Canonicalization Security</p>
+<p data-id="77" class="toc-entry-sub">11.3. Nonce Security</p>
+<p data-id="78" class="toc-entry-sub">11.4. Replay Protection Limitations</p>
+<p data-id="79" class="toc-entry-sub">11.5. Key Management</p>
+<p data-id="80" class="toc-entry-sub">11.6. Algorithm Substitution Attacks</p>
+<p data-id="81" class="toc-entry-sub">11.7. Denial of Service</p>
+<p data-id="82" class="toc-entry-sub">11.8. Privacy Considerations</p>
+<p data-id="83" class="toc-entry">12. IANA Considerations</p>
+<p data-id="84" class="toc-entry-sub">12.1. Media Types</p>
+<p data-id="85" class="toc-entry-sub">12.2. HTTP Header Fields</p>
+<p data-id="86" class="toc-entry-sub">12.3. COSE Header Parameter</p>
+<p data-id="87" class="toc-entry-sub">12.4. Well-Known URI</p>
+<p data-id="88" class="toc-entry-sub">12.5. GAP Algorithm Registry</p>
+<p data-id="89" class="toc-entry">13. References</p>
+<p data-id="90" class="toc-entry-sub">13.1. Normative References</p>
+<p data-id="91" class="toc-entry-sub">13.2. Informative References</p>
+<p data-id="92" class="toc-entry">Appendix A. Complete Envelope Examples</p>
+<p data-id="93" class="toc-entry-sub">A.1. JWS Example</p>
+<p data-id="94" class="toc-entry-sub">A.2. COSE Example</p>
+<p data-id="95" class="toc-entry">Appendix B. Normative Changes from v1.4.0</p>
+<p data-id="96" class="toc-entry">Appendix C. JSON Schema for Authorization Envelope</p>
+
+<!-- ============================================================ -->
+<!-- 1. INTRODUCTION -->
+<!-- ============================================================ -->
+
+<h1 data-id="97">1. Introduction</h1>
+
+<p data-id="98">The rapid proliferation of autonomous software agents across distributed computing environments has introduced a fundamental challenge to authorization architectures. AI-powered agents now routinely execute multi-step workflows that span organizational boundaries, invoke external APIs, modify persistent state, and orchestrate actions across heterogeneous services. These agents operate on behalf of human users, organizational principals, or other agents in complex delegation chains that traditional access-control models were not designed to accommodate.</p>
+
+<p data-id="99">The current state of agent authorization suffers from what this specification terms the "authorization gap." Agents typically inherit ambient credentials — API keys, OAuth 2.0 bearer tokens, service-account credentials — that grant broad, coarse-grained access without per-action accountability. When an agent presents a bearer token to an API endpoint, the endpoint can verify that the token is valid and that it carries certain scopes, but the endpoint cannot determine which specific action the agent intends to perform, whether that action was explicitly authorized by the principal, or what level of identity assurance the agent possesses. This opacity creates risk: a compromised or misconfigured agent can take unauthorized actions that are indistinguishable from legitimate ones at the transport layer.</p>
+
+<p data-id="100">The Generic Authorization Protocol (GAP) addresses this gap by establishing a simple, foundational principle: <strong data-id="101">every agent action <span data-id="102" class="keyword">MUST</span> carry a self-contained, cryptographically signed authorization envelope</strong>. The envelope binds the agent's identity, the principal's identity, the target resource, the specific action, the action parameters, and a verifiable assurance level into a single signed data structure. Enforcement Points intercept these envelopes, verify the cryptographic signatures, evaluate policy, and produce allow, deny, or hold decisions before the action reaches the Resource Server.</p>
+
+<p data-id="103">GAP employs a two-layer architecture. <strong data-id="104">Layer 1 (Identity Binding)</strong> ensures that each agent possesses a verifiable identity tied to a cryptographic key pair. The identity may be provisioned through any supported identity framework — OAuth 2.0 [RFC6749], SPIFFE, X.509, or custom schemes — and GAP does not mandate a specific identity provider. <strong data-id="105">Layer 2 (Policy Enforcement)</strong> evaluates the signed envelope against local or centralized policy. The policy engine is implementation-specific; GAP defines the envelope format, signing mechanics, and verification procedures that the policy engine consumes.</p>
+
+<p data-id="106">This specification defines the Authorization Envelope structure, canonicalization procedures, signing and verification rules for both JSON Web Signature (JWS) [RFC7515] and CBOR Object Signing and Encryption (COSE) [RFC9052] formats, nonce and replay-protection semantics, assurance-level validation, algorithm-agility framework, and transport binding for HTTP. GAP is designed to layer atop existing identity and transport infrastructure without requiring replacement of deployed systems.</p>
+
+<p data-id="107">This document does <strong data-id="108">not</strong> cover: key distribution or provisioning, identity-provider protocols, transport-layer security (TLS configuration), policy language or evaluation semantics, or inter-domain trust federation. These topics are deferred to companion specifications or deployment profiles.</p>
+
+<h3 data-id="109">1.1. Changes from v1.4.0 to v1.4.1</h3>
+
+<p data-id="110">Version 1.4.1 introduces the following normative corrections and clarifications:</p>
+
+<ul data-id="111">
+    <li data-id="112">Added mandatory canonicalization via JSON Canonicalization Scheme (JCS, RFC 8785) and CBOR Deterministic Encoding (RFC 8949) — see Section 4.</li>
+    <li data-id="113">Clarified JWS detached-payload mode with <code data-id="114">b64:false</code> semantics per RFC 7797 and COSE_Sign1 payload handling rules — see Section 5.2 and Section 5.3.</li>
+    <li data-id="115">Introduced <code data-id="116">action_params</code> structural constraints: maximum nesting depth of 8, maximum serialized size of 64 KiB, type restrictions, circular-reference prohibition, and key-uniqueness requirement — see Section 6.2.</li>
+    <li data-id="117">Raised nonce entropy floor to 128 bits from a Cryptographically Secure Pseudo-Random Number Generator (CSPRNG) — see Section 8.1.</li>
+    <li data-id="118">Added normative <code data-id="119">assurance_level</code> validation with enumerated values and downgrade-resistance rules — see Section 7.</li>
+    <li data-id="120">Defined replay-window semantics with a <span data-id="121" class="keyword">RECOMMENDED</span> 300-second default and minimum/maximum bounds — see Section 8.2.</li>
+    <li data-id="122">Introduced algorithm-agility framework with mandatory-to-implement cipher suites, a deprecation lifecycle, and post-quantum considerations — see Section 9.</li>
+    <li data-id="123">Expanded signing-scope definition to include all 13 <span data-id="124" class="keyword">REQUIRED</span> envelope fields plus 4 <span data-id="125" class="keyword">OPTIONAL</span> fields, with explicit prohibition of partial inclusion — see Section 5.4.</li>
+</ul>
+
+<!-- ============================================================ -->
+<!-- 2. TERMINOLOGY -->
+<!-- ============================================================ -->
+
+<h1 data-id="126">2. Terminology</h1>
+
+<h2 data-id="127">2.1. Key Words</h2>
+
+<p data-id="128">The key words "<span data-id="129" class="keyword">MUST</span>", "<span data-id="130" class="keyword">MUST NOT</span>", "<span data-id="131" class="keyword">REQUIRED</span>", "<span data-id="132" class="keyword">SHALL</span>", "<span data-id="133" class="keyword">SHALL NOT</span>", "<span data-id="134" class="keyword">SHOULD</span>", "<span data-id="135" class="keyword">SHOULD NOT</span>", "<span data-id="136" class="keyword">RECOMMENDED</span>", "<span data-id="137" class="keyword">NOT RECOMMENDED</span>", "<span data-id="138" class="keyword">MAY</span>", and "<span data-id="139" class="keyword">OPTIONAL</span>" in this document are to be interpreted as described in BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all capitals, as shown here.</p>
+
+<h2 data-id="140">2.2. Definitions</h2>
+
+<p data-id="141"><strong data-id="142">Agent</strong>: An autonomous software entity that performs actions on behalf of a principal (human user, organization, or another agent). An Agent possesses a cryptographic key pair and is identified by a unique URI.</p>
+
+<p data-id="143"><strong data-id="144">Principal</strong>: The human or organizational entity that delegates authority to an Agent. The Principal is identified by a URI and is the ultimate source of authorization for the Agent's actions.</p>
+
+<p data-id="145"><strong data-id="146">Authorization Envelope</strong>: The complete signed data structure that accompanies each agent action, containing identity claims, action descriptors, temporal bounds, a nonce, assurance-level indicators, and cryptographic proof. The envelope is the atomic unit of authorization in GAP.</p>
+
+<p data-id="147"><strong data-id="148">Action Descriptor</strong>: The tuple (<code data-id="149">target</code>, <code data-id="150">action</code>, <code data-id="151">action_params</code>) identifying the specific operation requested. Together these three fields fully describe what the Agent intends to do and where.</p>
+
+<p data-id="152"><strong data-id="153">Signing Scope</strong>: The ordered set of envelope fields included in the cryptographic signature computation. The signing scope determines which fields are integrity-protected and which are not.</p>
+
+<p data-id="154"><strong data-id="155">Assurance Level</strong>: A categorical indicator of the strength of identity verification applied to the Agent. Enumerated values: <code data-id="156">"self-asserted"</code>, <code data-id="157">"domain-validated"</code>, <code data-id="158">"organization-validated"</code>, <code data-id="159">"hardware-bound"</code>. See Section 7 for definitions.</p>
+
+<p data-id="160"><strong data-id="161">Enforcement Point (EP)</strong>: A component that intercepts agent actions, verifies authorization envelopes, evaluates policy, and produces allow/deny/hold decisions. The EP sits between the Agent and the Resource Server in the request path.</p>
+
+<p data-id="162"><strong data-id="163">Replay Window</strong>: The time interval during which a nonce <span data-id="164" class="keyword">MUST</span> be retained by an Enforcement Point to detect duplicate submissions. See Section 8.2.</p>
+
+<p data-id="165"><strong data-id="166">Nonce</strong>: A unique, unpredictable value included in each Authorization Envelope to prevent replay attacks. The nonce <span data-id="167" class="keyword">MUST</span> contain at least 128 bits of entropy generated by a CSPRNG.</p>
+
+<p data-id="168"><strong data-id="169">Canonicalization</strong>: The deterministic transformation of a data structure into a byte sequence suitable for signing. GAP mandates JCS (RFC 8785) for JSON and CBOR Deterministic Encoding (RFC 8949) for CBOR. See Section 4.</p>
+
+<!-- ============================================================ -->
+<!-- 3. PROTOCOL OVERVIEW -->
+<!-- ============================================================ -->
+
+<h1 data-id="170">3. Protocol Overview</h1>
+
+<h2 data-id="171">3.1. Architecture</h2>
+
+<p data-id="172">The GAP architecture involves three principals:</p>
+
+<ul data-id="173">
+    <li data-id="174"><strong data-id="175">Agent</strong>: The autonomous software entity initiating actions. The Agent constructs and signs Authorization Envelopes.</li>
+    <li data-id="176"><strong data-id="177">Enforcement Point (EP)</strong>: The intermediary that intercepts requests, verifies envelopes, evaluates policy, and issues authorization decisions.</li>
+    <li data-id="178"><strong data-id="179">Resource Server</strong>: The system hosting the target resource or API that processes the authorized action.</li>
+</ul>
+
+<p data-id="180">The protocol flow proceeds as follows:</p>
+
+<pre data-id="181">
+  +-------+                  +--------------------+                  +-----------------+
+  | Agent |---[Signed Env]-->| Enforcement Point  |---[Verified]--->| Resource Server |
+  +-------+                  | (Verify + Policy)  |                  +-----------------+
+                             +--------------------+
+                                     |
+                              Allow / Deny / Hold
+</pre>
+
+<p data-id="182">The Agent constructs an Authorization Envelope containing all required fields, canonicalizes and signs it, then attaches the signed envelope to the outgoing request. The Enforcement Point intercepts the request, extracts the envelope, verifies the signature, validates structural and temporal constraints, evaluates policy, and produces an allow, deny, or hold decision. On allow, the EP forwards the request to the Resource Server with verified envelope metadata. On deny, the EP returns an error response to the Agent. On hold, the EP may defer the decision pending additional input (e.g., human approval).</p>
+
+<h2 data-id="183">3.2. Authorization Envelope Structure</h2>
+
+<p data-id="184">The Authorization Envelope is a JSON object (or CBOR map) with the following <span data-id="185" class="keyword">REQUIRED</span> fields:</p>
+
+<pre data-id="186">
+{
+  "gap_version":       "1.4.1",
+  "envelope_id":       "&lt;UUID v4&gt;",
+  "agent_id":          "&lt;URI&gt;",
+  "principal_id":      "&lt;URI&gt;",
+  "issued_at":         "&lt;RFC 3339 timestamp&gt;",
+  "expires_at":        "&lt;RFC 3339 timestamp&gt;",
+  "nonce":             "&lt;base64url-encoded, min 128 bits&gt;",
+  "assurance_level":   "&lt;enumerated string&gt;",
+  "target":            "&lt;URI of resource server or endpoint&gt;",
+  "action":            "&lt;string action identifier&gt;",
+  "action_params":     { ... },
+  "signing_algorithm": "&lt;algorithm identifier&gt;",
+  "key_id":            "&lt;key identifier (kid)&gt;"
+}
+</pre>
+
+<p data-id="187"><strong data-id="188">Field Definitions:</strong></p>
+
+<ul data-id="189">
+    <li data-id="190"><strong data-id="191">gap_version</strong> (string, <span data-id="192" class="keyword">REQUIRED</span>): The GAP protocol version. For this specification, the value <span data-id="193" class="keyword">MUST</span> be <code data-id="194">"1.4.1"</code>. Enforcement Points <span data-id="195" class="keyword">MUST</span> reject envelopes with unrecognized version strings.</li>
+    <li data-id="196"><strong data-id="197">envelope_id</strong> (string, <span data-id="198" class="keyword">REQUIRED</span>): A UUID v4 uniquely identifying this envelope. Implementations <span data-id="199" class="keyword">MUST</span> generate a fresh UUID for each envelope. The <code data-id="200">envelope_id</code> is used for logging, auditing, and correlation.</li>
+    <li data-id="201"><strong data-id="202">agent_id</strong> (string, <span data-id="203" class="keyword">REQUIRED</span>): A URI identifying the Agent. Examples include URN-based identifiers (<code data-id="204">urn:gap:agent:example:bot-1</code>), SPIFFE IDs (<code data-id="205">spiffe://trust-domain/agent/bot-1</code>), or HTTPS-based identifiers.</li>
+    <li data-id="206"><strong data-id="207">principal_id</strong> (string, <span data-id="208" class="keyword">REQUIRED</span>): A URI identifying the Principal on whose behalf the Agent acts. This binds the agent action to a delegating authority.</li>
+    <li data-id="209"><strong data-id="210">issued_at</strong> (string, <span data-id="211" class="keyword">REQUIRED</span>): An RFC 3339 timestamp indicating when the envelope was created. <span data-id="212" class="keyword">MUST</span> be expressed in UTC (with "Z" suffix). Used for replay-window computation (Section 8.2).</li>
+    <li data-id="213"><strong data-id="214">expires_at</strong> (string, <span data-id="215" class="keyword">REQUIRED</span>): An RFC 3339 timestamp indicating when the envelope expires. <span data-id="216" class="keyword">MUST</span> be after <code data-id="217">issued_at</code>. Enforcement Points <span data-id="218" class="keyword">MUST</span> reject envelopes where the current time exceeds <code data-id="219">expires_at</code>.</li>
+    <li data-id="220"><strong data-id="221">nonce</strong> (string, <span data-id="222" class="keyword">REQUIRED</span>): A base64url-encoded value with at least 128 bits of entropy from a CSPRNG. See Section 8.1 for full requirements.</li>
+    <li data-id="223"><strong data-id="224">assurance_level</strong> (string, <span data-id="225" class="keyword">REQUIRED</span>): One of the four enumerated assurance-level values defined in Section 7.1. Any other value <span data-id="226" class="keyword">MUST</span> cause rejection.</li>
+    <li data-id="227"><strong data-id="228">target</strong> (string, <span data-id="229" class="keyword">REQUIRED</span>): A URI identifying the resource server or specific endpoint the Agent intends to access.</li>
+    <li data-id="230"><strong data-id="231">action</strong> (string, <span data-id="232" class="keyword">REQUIRED</span>): A string identifying the specific operation the Agent requests (e.g., <code data-id="233">"query_weather"</code>, <code data-id="234">"create_order"</code>, <code data-id="235">"delete_record"</code>). Action identifiers <span data-id="236" class="keyword">SHOULD</span> be drawn from a documented action vocabulary for the target service.</li>
+    <li data-id="237"><strong data-id="238">action_params</strong> (object, <span data-id="239" class="keyword">REQUIRED</span>): A JSON object containing parameters for the requested action. <span data-id="240" class="keyword">MAY</span> be an empty object <code data-id="241">{}</code> if the action requires no parameters. See Section 6 for structural constraints.</li>
+    <li data-id="242"><strong data-id="243">signing_algorithm</strong> (string, <span data-id="244" class="keyword">REQUIRED</span>): The identifier of the algorithm used to sign the envelope. For JWS, this is the JWA algorithm name (e.g., <code data-id="245">"ES256"</code>). For COSE, this is the COSE algorithm identifier. See Section 9 for the algorithm registry.</li>
+    <li data-id="246"><strong data-id="247">key_id</strong> (string, <span data-id="248" class="keyword">REQUIRED</span>): The identifier of the signing key (<code data-id="249">kid</code>). Used by the Enforcement Point to locate the corresponding public key for verification.</li>
+</ul>
+
+<p data-id="250">The following <span data-id="251" class="keyword">OPTIONAL</span> fields <span data-id="252" class="keyword">MAY</span> be included:</p>
+
+<ul data-id="253">
+    <li data-id="254"><strong data-id="255">delegation_chain</strong> (array): An ordered array of delegation tokens establishing a chain of delegated authority from the Principal to the Agent. Each element represents one delegation step.</li>
+    <li data-id="256"><strong data-id="257">scope_constraints</strong> (object): Additional scope restrictions imposed by the Principal or an intermediate delegator, narrowing the Agent's permitted actions.</li>
+    <li data-id="258"><strong data-id="259">binding_metadata</strong> (object): Transport or channel binding data (e.g., TLS channel binding tokens) linking the envelope to a specific transport session.</li>
+    <li data-id="260"><strong data-id="261">extensions</strong> (object): Registered extension fields for protocol extensions. Keys <span data-id="262" class="keyword">MUST</span> be drawn from a future GAP Extensions Registry.</li>
+</ul>
+
+<h2 data-id="263">3.3. Protocol Flow</h2>
+
+<p data-id="264">The complete protocol flow proceeds through the following steps:</p>
+
+<ol data-id="265">
+    <li data-id="266"><strong data-id="267">Credential Acquisition</strong>: The Agent obtains its cryptographic key pair and any necessary identity attestations from an identity provider. This step is out of scope for GAP.</li>
+    <li data-id="268"><strong data-id="269">Envelope Construction</strong>: The Agent constructs the Authorization Envelope with all <span data-id="270" class="keyword">REQUIRED</span> fields populated. The <code data-id="271">nonce</code> is generated fresh per Section 8.1. The <code data-id="272">issued_at</code> and <code data-id="273">expires_at</code> are set to appropriate values.</li>
+    <li data-id="274"><strong data-id="275">Canonicalization</strong>: The Agent canonicalizes the envelope per Section 4. For JSON, this means applying JCS (RFC 8785). For CBOR, this means applying CBOR Deterministic Encoding (RFC 8949).</li>
+    <li data-id="276"><strong data-id="277">Signing</strong>: The Agent signs the canonical byte sequence per Section 5, producing a JWS Compact Serialization (with detached payload) or a COSE_Sign1 structure.</li>
+    <li data-id="278"><strong data-id="279">Transmission</strong>: The Agent transmits the request to the Enforcement Point. The signed token is placed in the <code data-id="280">GAP-Authorization</code> HTTP header (Section 10.1). The envelope body is transmitted as the request body.</li>
+    <li data-id="281"><strong data-id="282">Verification</strong>: The Enforcement Point extracts the envelope and performs the following checks in order:
+        <ol data-id="283" type="a">
+            <li data-id="284"><strong data-id="285">Structural validity</strong>: All <span data-id="286" class="keyword">REQUIRED</span> fields are present and have correct types.</li>
+            <li data-id="287"><strong data-id="288">Action-params validation</strong>: <code data-id="289">action_params</code> conforms to the structural constraints of Section 6.2.</li>
+            <li data-id="290"><strong data-id="291">Temporal validity</strong>: <code data-id="292">issued_at</code> &lt;= now &lt;= <code data-id="293">expires_at</code>, within clock-skew tolerance (Section 8.3).</li>
+            <li data-id="294"><strong data-id="295">Nonce uniqueness</strong>: The (<code data-id="296">agent_id</code>, <code data-id="297">nonce</code>) tuple is not present in the replay cache (Section 8.2).</li>
+            <li data-id="298"><strong data-id="299">Signature verification</strong>: The cryptographic signature is valid per Section 5.</li>
+            <li data-id="300"><strong data-id="301">Assurance-level validation</strong>: The <code data-id="302">assurance_level</code> meets the minimum required for the target/action combination (Section 7).</li>
+            <li data-id="303"><strong data-id="304">Policy evaluation</strong>: Implementation-specific policy rules are applied.</li>
+        </ol>
+    </li>
+    <li data-id="305"><strong data-id="306">Decision</strong>: The EP issues one of three decisions: <strong data-id="307">allow</strong> (forward the request), <strong data-id="308">deny</strong> (return an error), or <strong data-id="309">hold</strong> (defer pending additional input such as human approval).</li>
+    <li data-id="310"><strong data-id="311">Forwarding</strong>: On allow, the EP forwards the request to the Resource Server, optionally attaching verified envelope metadata (e.g., <code data-id="312">agent_id</code>, <code data-id="313">assurance_level</code>, policy decision identifier) for the Resource Server's use.</li>
+</ol>
+
+<!-- ============================================================ -->
+<!-- 4. CANONICALIZATION -->
+<!-- ============================================================ -->
+
+<h1 data-id="314">4. Canonicalization</h1>
+
+<h2 data-id="315">4.1. Requirement</h2>
+
+<p data-id="316">Before signing or verifying an Authorization Envelope, implementations <span data-id="317" class="keyword">MUST</span> serialize the envelope into a canonical byte sequence. The canonical form is the sole input to the signature computation. Signing non-canonical representations is a protocol violation and <span data-id="318" class="keyword">MUST</span> cause verification failure at the Enforcement Point.</p>
+
+<p data-id="319">Canonicalization ensures that two implementations processing the same logical envelope produce identical byte sequences, which is essential for signature interoperability. Without canonicalization, semantically equivalent envelopes (e.g., differing only in whitespace or key order) would produce different signatures, breaking cross-implementation verification.</p>
+
+<h2 data-id="320">4.2. JSON Canonicalization Scheme (JCS)</h2>
+
+<p data-id="321">Implementations using JSON <span data-id="322" class="keyword">MUST</span> apply the JSON Canonicalization Scheme as defined in RFC 8785 [RFC8785]. JCS produces deterministic JSON output with the following properties:</p>
+
+<ul data-id="323">
+    <li data-id="324"><strong data-id="325">Sorted object member keys</strong>: All object members are sorted by key in lexicographic Unicode code-point order. Sorting is applied recursively to nested objects.</li>
+    <li data-id="326"><strong data-id="327">No insignificant whitespace</strong>: No whitespace is emitted between tokens (no spaces after colons or commas, no indentation, no newlines).</li>
+    <li data-id="328"><strong data-id="329">Deterministic number serialization</strong>: Numbers are serialized per ECMAScript's <code data-id="330">Number.toString()</code> specification — no trailing zeros, no positive-sign prefix, no unnecessary decimal points for integers, and exponential notation only when required by the specification.</li>
+    <li data-id="331"><strong data-id="332">UTF-8 encoding without BOM</strong>: The output is encoded as UTF-8. A Byte Order Mark (BOM) <span data-id="333" class="keyword">MUST NOT</span> be prepended.</li>
+    <li data-id="334"><strong data-id="335">String escaping per RFC 8785</strong>: Strings use the minimal escaping defined by JCS. Characters U+0000 through U+001F are escaped using <code data-id="336">\uXXXX</code> notation. Backslash and double-quote are escaped. All other characters are represented literally in UTF-8.</li>
+</ul>
+
+<p data-id="337">The canonical byte sequence is the UTF-8 encoding of the JCS-serialized envelope. This byte sequence is used directly as the payload input for JWS signing (Section 5.2).</p>
+
+<h2 data-id="338">4.3. CBOR Canonicalization</h2>
+
+<p data-id="339">For COSE-based deployments, implementations <span data-id="340" class="keyword">MUST</span> serialize the Authorization Envelope using CBOR Deterministic Encoding as specified in Section 4.2 of RFC 8949 [RFC8949]. The following rules apply:</p>
+
+<ul data-id="341">
+    <li data-id="342">Map keys <span data-id="343" class="keyword">MUST</span> be sorted in bytewise lexicographic order of their deterministic CBOR encoding.</li>
+    <li data-id="344">Indefinite-length encodings <span data-id="345" class="keyword">MUST NOT</span> be used. All data items <span data-id="346" class="keyword">MUST</span> use definite-length encoding.</li>
+    <li data-id="347">Integers <span data-id="348" class="keyword">MUST</span> be encoded in the smallest number of bytes that can represent the value.</li>
+    <li data-id="349">Floating-point values <span data-id="350" class="keyword">SHOULD</span> be avoided where integer representation is sufficient. When used, preferred serialization per Section 4.2.1 of RFC 8949 applies.</li>
+</ul>
+
+<p data-id="351">The canonical CBOR byte sequence is used directly as the payload input for COSE signing (Section 5.3).</p>
+
+<h2 data-id="352">4.4. Canonicalization Scope</h2>
+
+<p data-id="353">The canonicalization <span data-id="354" class="keyword">MUST</span> be applied to the complete Authorization Envelope object, including all <span data-id="355" class="keyword">REQUIRED</span> and <span data-id="356" class="keyword">OPTIONAL</span> fields present at the time of signing. Fields added after signing (e.g., transport headers, EP annotations, routing metadata) <span data-id="357" class="keyword">MUST NOT</span> be included in the canonical form.</p>
+
+<p data-id="358">Implementations <span data-id="359" class="keyword">MUST NOT</span> selectively exclude envelope fields from canonicalization. The canonical form is a complete, faithful representation of the envelope as constructed by the Agent at signing time.</p>
+
+<!-- ============================================================ -->
+<!-- 5. SIGNING AND VERIFICATION -->
+<!-- ============================================================ -->
+
+<h1 data-id="360">5. Signing and Verification</h1>
+
+<h2 data-id="361">5.1. General Requirements</h2>
+
+<ul data-id="362">
+    <li data-id="363">Every Authorization Envelope <span data-id="364" class="keyword">MUST</span> be signed by the Agent using the private key corresponding to the <code data-id="365">key_id</code> identified in the envelope.</li>
+    <li data-id="366">The signature <span data-id="367" class="keyword">MUST</span> cover the canonical byte sequence produced per Section 4. Signing any other representation of the envelope is a protocol violation.</li>
+    <li data-id="368">Two signing formats are defined: JWS (Section 5.2) for JSON/HTTP environments and COSE (Section 5.3) for constrained or CBOR-native environments.</li>
+    <li data-id="369">Implementations <span data-id="370" class="keyword">MUST</span> support at least one signing format. Implementations that support both <span data-id="371" class="keyword">MUST</span> correctly negotiate the format via the <code data-id="372">gap_format</code> header or out-of-band configuration.</li>
+    <li data-id="373">The signing algorithm used <span data-id="374" class="keyword">MUST</span> be one of the algorithms listed in the GAP Algorithm Registry (Section 9) with a lifecycle state of <span data-id="375" class="keyword">MANDATORY</span>, <span data-id="376" class="keyword">RECOMMENDED</span>, or <span data-id="377" class="keyword">OPTIONAL</span>. Algorithms in <span data-id="378" class="keyword">DEPRECATED</span> state <span data-id="379" class="keyword">MUST NOT</span> be used for new signatures. Algorithms in <span data-id="380" class="keyword">PROHIBITED</span> state <span data-id="381" class="keyword">MUST NOT</span> be used or accepted.</li>
+</ul>
+
+<h2 data-id="382">5.2. JWS Signing (RFC 7515)</h2>
+
+<h3 data-id="383">5.2.1. Detached Payload Mode</h3>
+
+<p data-id="384">When using JWS, implementations <span data-id="385" class="keyword">MUST</span> use the JWS Compact Serialization with detached payload as specified in Appendix F of RFC 7515 [RFC7515]. The payload (the canonical envelope byte sequence) <span data-id="386" class="keyword">MUST NOT</span> appear in the JWS token itself; instead, the canonical bytes are provided out-of-band — in the HTTP request body or a designated header.</p>
+
+<p data-id="387"><strong data-id="388">Rationale:</strong> Detached payloads avoid double-encoding the envelope (once in the request body and again in the JWS payload segment). They also ensure that the Enforcement Point can independently reconstruct the canonical form from the envelope fields it receives, compare it to the signed content, and detect tampering of any field.</p>
+
+<h3 data-id="389">5.2.2. JWS Header Requirements</h3>
+
+<p data-id="390">The JWS Protected Header <span data-id="391" class="keyword">MUST</span> contain the following parameters:</p>
+
+<table data-id="392">
+    <tr data-id="393"><th data-id="394">Parameter</th><th data-id="395">Value</th><th data-id="396">Requirement</th></tr>
+    <tr data-id="397"><td data-id="398"><code data-id="399">alg</code></td><td data-id="400">The signing algorithm (Section 9)</td><td data-id="401"><span data-id="402" class="keyword">REQUIRED</span></td></tr>
+    <tr data-id="403"><td data-id="404"><code data-id="405">kid</code></td><td data-id="406">The key identifier matching the envelope's <code data-id="407">key_id</code></td><td data-id="408"><span data-id="409" class="keyword">REQUIRED</span></td></tr>
+    <tr data-id="410"><td data-id="411"><code data-id="412">b64</code></td><td data-id="413"><code data-id="414">false</code></td><td data-id="415"><span data-id="416" class="keyword">REQUIRED</span></td></tr>
+    <tr data-id="417"><td data-id="418"><code data-id="419">crit</code></td><td data-id="420"><code data-id="421">["b64"]</code></td><td data-id="422"><span data-id="423" class="keyword">REQUIRED</span></td></tr>
+    <tr data-id="424"><td data-id="425"><code data-id="426">gap_ver</code></td><td data-id="427"><code data-id="428">"1.4.1"</code></td><td data-id="429"><span data-id="430" class="keyword">REQUIRED</span></td></tr>
+</table>
+
+<p data-id="431">The <code data-id="432">b64</code> header parameter <span data-id="433" class="keyword">MUST</span> be set to <code data-id="434">false</code>, and <code data-id="435">"b64"</code> <span data-id="436" class="keyword">MUST</span> appear in the <code data-id="437">crit</code> array, per RFC 7797 [RFC7797] Section 5. This ensures the payload bytes are used directly in the signing input without base64url encoding, enabling the EP to verify the signature against the raw canonical bytes.</p>
+
+<h3 data-id="438">5.2.3. JWS Signing Input</h3>
+
+<p data-id="439">The JWS Signing Input is computed as:</p>
+
+<pre data-id="440">
+ASCII(BASE64URL(UTF8(JWS Protected Header))) || '.' || JCS_Canonical_Bytes
+</pre>
+
+<p data-id="441">Where <code data-id="442">JCS_Canonical_Bytes</code> is the raw canonical byte sequence produced by Section 4.2, <strong data-id="443">not</strong> base64url-encoded, per the <code data-id="444">b64:false</code> semantics of RFC 7797. The dot (<code data-id="445">'.'</code>) separator is the ASCII period character (0x2E).</p>
+
+<h3 data-id="446">5.2.4. JWS Verification</h3>
+
+<p data-id="447">Enforcement Points <span data-id="448" class="keyword">MUST</span> perform the following steps to verify a JWS-signed envelope:</p>
+
+<ol data-id="449">
+    <li data-id="450">Extract the JWS Protected Header from the detached JWS token (the first segment before the first dot).</li>
+    <li data-id="451">Base64url-decode and parse the Protected Header as JSON.</li>
+    <li data-id="452">Verify that <code data-id="453">gap_ver</code> matches the expected protocol version (<code data-id="454">"1.4.1"</code>).</li>
+    <li data-id="455">Verify that <code data-id="456">b64</code> is <code data-id="457">false</code> and that <code data-id="458">"b64"</code> appears in the <code data-id="459">crit</code> array.</li>
+    <li data-id="460">Reconstruct the canonical byte sequence from the received envelope per Section 4.2 (JCS).</li>
+    <li data-id="461">Compute the JWS Signing Input per Section 5.2.3 using the reconstructed canonical bytes.</li>
+    <li data-id="462">Retrieve the public key identified by the <code data-id="463">kid</code> parameter.</li>
+    <li data-id="464">Verify the signature (the third segment of the JWS token) against the Signing Input using the public key and the algorithm specified in <code data-id="465">alg</code>.</li>
+    <li data-id="466">If any step fails, reject the envelope with the appropriate error code (Section 10.2).</li>
+</ol>
+
+<h2 data-id="467">5.3. COSE Signing (RFC 9052)</h2>
+
+<h3 data-id="468">5.3.1. COSE_Sign1 Structure</h3>
+
+<p data-id="469">When using COSE, implementations <span data-id="470" class="keyword">MUST</span> use the COSE_Sign1 structure (single signer) as defined in Section 4.2 of RFC 9052 [RFC9052]. The COSE_Sign1 CBOR array contains four elements:</p>
+
+<pre data-id="471">
+COSE_Sign1 = [
+  protected   : bstr,    ; CBOR-encoded protected header map
+  unprotected : map,     ; Empty map {}
+  payload     : bstr,    ; Canonical CBOR bytes (Section 4.3)
+  signature   : bstr     ; Computed signature
+]
+</pre>
+
+<p data-id="472">The payload <span data-id="473" class="keyword">MUST</span> be included directly in the COSE_Sign1 structure (i.e., not detached) unless the deployment profile explicitly specifies detached payloads. In detached mode, the payload field is set to <code data-id="474">nil</code> and the canonical bytes are conveyed separately. Deployment profiles that specify detached COSE payloads <span data-id="475" class="keyword">MUST</span> document the mechanism for conveying the payload bytes.</p>
+
+<h3 data-id="476">5.3.2. COSE Header Parameters</h3>
+
+<p data-id="477">The protected header map <span data-id="478" class="keyword">MUST</span> contain the following parameters:</p>
+
+<table data-id="479">
+    <tr data-id="480"><th data-id="481">Label</th><th data-id="482">Parameter</th><th data-id="483">Value</th><th data-id="484">Requirement</th></tr>
+    <tr data-id="485"><td data-id="486">1</td><td data-id="487">Algorithm</td><td data-id="488">COSE algorithm identifier (e.g., -7 for ES256)</td><td data-id="489"><span data-id="490" class="keyword">REQUIRED</span></td></tr>
+    <tr data-id="491"><td data-id="492">4</td><td data-id="493">Key ID</td><td data-id="494">Key identifier bytes</td><td data-id="495"><span data-id="496" class="keyword">REQUIRED</span></td></tr>
+    <tr data-id="497"><td data-id="498">-65537</td><td data-id="499">GAP Version</td><td data-id="500">UTF-8 string <code data-id="501">"1.4.1"</code></td><td data-id="502"><span data-id="503" class="keyword">REQUIRED</span></td></tr>
+</table>
+
+<p data-id="504">The GAP Version parameter uses private-use label -65537. Registration in the COSE Header Parameters registry is requested in Section 12.3. The unprotected header map <span data-id="505" class="keyword">MUST</span> be empty.</p>
+
+<h3 data-id="506">5.3.3. Sig_structure for COSE_Sign1</h3>
+
+<p data-id="507">The Sig_structure is computed per Section 4.4 of RFC 9052:</p>
+
+<pre data-id="508">
+Sig_structure = [
+  "Signature1",      ; context string
+  protected,         ; CBOR-encoded protected header
+  external_aad,      ; External Additional Authenticated Data
+  payload            ; Canonical CBOR bytes
+]
+</pre>
+
+<p data-id="509">The <code data-id="510">external_aad</code> is empty (<code data-id="511">h''</code>) unless a deployment profile specifies additional authenticated data. The payload is the canonical CBOR byte sequence from Section 4.3. The Sig_structure is CBOR-encoded, and the resulting byte string is the input to the signature algorithm.</p>
+
+<h2 data-id="512">5.4. Signing Scope</h2>
+
+<p data-id="513">The signing scope is the set of fields whose values are included in the canonical byte sequence that is signed. The signing scope <span data-id="514" class="keyword">MUST</span> include <strong data-id="515">ALL</strong> of the following fields when present in the envelope:</p>
+
+<p data-id="516"><strong data-id="517"><span data-id="518" class="keyword">REQUIRED</span> in signing scope</strong> (<span data-id="519" class="keyword">MUST</span> always be present):</p>
+
+<ol data-id="520">
+    <li data-id="521"><code data-id="522">gap_version</code></li>
+    <li data-id="523"><code data-id="524">envelope_id</code></li>
+    <li data-id="525"><code data-id="526">agent_id</code></li>
+    <li data-id="527"><code data-id="528">principal_id</code></li>
+    <li data-id="529"><code data-id="530">issued_at</code></li>
+    <li data-id="531"><code data-id="532">expires_at</code></li>
+    <li data-id="533"><code data-id="534">nonce</code></li>
+    <li data-id="535"><code data-id="536">assurance_level</code></li>
+    <li data-id="537"><code data-id="538">target</code></li>
+    <li data-id="539"><code data-id="540">action</code></li>
+    <li data-id="541"><code data-id="542">action_params</code> (full canonical form, even if empty object)</li>
+    <li data-id="543"><code data-id="544">signing_algorithm</code></li>
+    <li data-id="545"><code data-id="546">key_id</code></li>
+</ol>
+
+<p data-id="547"><strong data-id="548"><span data-id="549" class="keyword">OPTIONAL</span> in signing scope</strong> (included if present in the envelope):</p>
+
+<ol data-id="550" start="14">
+    <li data-id="551"><code data-id="552">delegation_chain</code> (array of delegation tokens, if delegated authority)</li>
+    <li data-id="553"><code data-id="554">scope_constraints</code> (additional scope restrictions)</li>
+    <li data-id="555"><code data-id="556">binding_metadata</code> (transport or channel binding data)</li>
+    <li data-id="557"><code data-id="558">extensions</code> (registered extension fields)</li>
+</ol>
+
+<p data-id="559">Fields <span data-id="560" class="keyword">MUST</span> be included in the canonical form in their entirety. Partial inclusion — for example, signing <code data-id="561">action</code> but omitting <code data-id="562">action_params</code> — is a protocol violation and <span data-id="563" class="keyword">MUST</span> cause verification failure.</p>
+
+<p data-id="564">Enforcement Points <span data-id="565" class="keyword">MUST</span> reject envelopes where the signing scope does not cover all <span data-id="566" class="keyword">REQUIRED</span> fields. The EP <span data-id="567" class="keyword">MUST</span> independently reconstruct the canonical form from the received envelope and verify it matches the signed content. If the EP detects that any <span data-id="568" class="keyword">REQUIRED</span> field was modified or omitted after signing, the envelope <span data-id="569" class="keyword">MUST</span> be rejected with error <code data-id="570">gap_canonicalization_mismatch</code> (Section 10.2).</p>
+
+<!-- ============================================================ -->
+<!-- 6. ACTION PARAMETERS -->
+<!-- ============================================================ -->
+
+<h1 data-id="571">6. Action Parameters</h1>
+
+<h2 data-id="572">6.1. Structure</h2>
+
+<p data-id="573">The <code data-id="574">action_params</code> field is a JSON object (or CBOR map) containing parameters specific to the requested action. It is included in the signing scope (Section 5.4) and therefore <span data-id="575" class="keyword">MUST</span> conform to the canonicalization requirements of Section 4.</p>
+
+<p data-id="576">The semantics of <code data-id="577">action_params</code> are defined by the target service. GAP does not prescribe the contents of <code data-id="578">action_params</code> beyond the structural constraints defined in this section. Target services <span data-id="579" class="keyword">SHOULD</span> document their expected <code data-id="580">action_params</code> schemas.</p>
+
+<h2 data-id="581">6.2. Structural Constraints</h2>
+
+<p data-id="582">Implementations <span data-id="583" class="keyword">MUST</span> enforce the following constraints on <code data-id="584">action_params</code>:</p>
+
+<p data-id="585"><strong data-id="586">Maximum Nesting Depth:</strong> <code data-id="587">action_params</code> <span data-id="588" class="keyword">MUST NOT</span> exceed a nesting depth of 8 levels. Depth is counted from the <code data-id="589">action_params</code> root object (depth 0) inward. Objects or arrays at depth 8 <span data-id="590" class="keyword">MUST NOT</span> contain further objects or arrays. Scalar values (strings, numbers, booleans, null) at any depth are permitted.</p>
+
+<p data-id="591"><strong data-id="592">Maximum Serialized Size:</strong> The JCS-canonical (or CBOR deterministic) serialization of <code data-id="593">action_params</code> <span data-id="594" class="keyword">MUST NOT</span> exceed 65,536 bytes (64 KiB). Enforcement Points <span data-id="595" class="keyword">MUST</span> reject envelopes where <code data-id="596">action_params</code> exceeds this limit. This constraint prevents resource exhaustion during parsing and canonicalization.</p>
+
+<p data-id="597"><strong data-id="598">Allowed Value Types:</strong> Values within <code data-id="599">action_params</code> <span data-id="600" class="keyword">MUST</span> be one of: string, number (integer or IEEE 754 finite floating-point), boolean, null, array, or object. Special IEEE 754 values (NaN, Infinity, -Infinity) <span data-id="601" class="keyword">MUST NOT</span> appear. For CBOR deployments: tags <span data-id="602" class="keyword">MUST NOT</span> be used within <code data-id="603">action_params</code> unless defined by a registered extension.</p>
+
+<p data-id="604"><strong data-id="605">No Circular References:</strong> <code data-id="606">action_params</code> <span data-id="607" class="keyword">MUST NOT</span> contain circular references. Implementations <span data-id="608" class="keyword">MUST</span> detect and reject circular structures during canonicalization. In practice, JSON inherently disallows circular references, but CBOR implementations using shared-value tags <span data-id="609" class="keyword">MUST</span> guard against constructed cycles.</p>
+
+<p data-id="610"><strong data-id="611">Key Uniqueness:</strong> All object member keys within <code data-id="612">action_params</code> (at any depth) <span data-id="613" class="keyword">MUST</span> be unique strings. Duplicate keys <span data-id="614" class="keyword">MUST</span> cause rejection. This requirement aligns with RFC 8259 Section 4 ("The names within an object SHOULD be unique") and makes it normative for GAP.</p>
+
+<h2 data-id="615">6.3. Validation Ordering</h2>
+
+<p data-id="616">Enforcement Points <span data-id="617" class="keyword">MUST</span> validate <code data-id="618">action_params</code> structural constraints <strong data-id="619">BEFORE</strong> signature verification. This ordering prevents resource exhaustion from processing cryptographic operations on malformed or oversized payloads. A malicious actor could submit envelopes with pathologically nested or oversized <code data-id="620">action_params</code> designed to consume verification resources; early structural rejection mitigates this vector.</p>
+
+<!-- ============================================================ -->
+<!-- 7. ASSURANCE LEVELS -->
+<!-- ============================================================ -->
+
+<h1 data-id="621">7. Assurance Levels</h1>
+
+<h2 data-id="622">7.1. Enumerated Values</h2>
+
+<p data-id="623">GAP defines four assurance levels, ordered from lowest to highest:</p>
+
+<table data-id="624">
+    <tr data-id="625"><th data-id="626">Level</th><th data-id="627">Value String</th><th data-id="628">Meaning</th></tr>
+    <tr data-id="629">
+        <td data-id="630">1</td>
+        <td data-id="631"><code data-id="632">"self-asserted"</code></td>
+        <td data-id="633">Agent identity is claimed but not independently verified. Key pair is self-generated. Suitable for low-risk, sandboxed operations where the consequences of impersonation are minimal.</td>
+    </tr>
+    <tr data-id="634">
+        <td data-id="635">2</td>
+        <td data-id="636"><code data-id="637">"domain-validated"</code></td>
+        <td data-id="638">Agent identity is bound to a verified domain via DNS challenge, ACME challenge, or equivalent mechanism. Key pair is certified by a domain-level Certificate Authority or SPIFFE trust domain.</td>
+    </tr>
+    <tr data-id="639">
+        <td data-id="640">3</td>
+        <td data-id="641"><code data-id="642">"organization-validated"</code></td>
+        <td data-id="643">Agent identity is bound to a verified organizational entity. Key pair is issued by an organization-level Certificate Authority with legal-entity validation (e.g., OV or EV certificate procedures).</td>
+    </tr>
+    <tr data-id="644">
+        <td data-id="645">4</td>
+        <td data-id="646"><code data-id="647">"hardware-bound"</code></td>
+        <td data-id="648">Agent signing key is generated and stored in a hardware security module (HSM), Trusted Platform Module (TPM), or secure enclave. Key extraction is prevented by hardware. The highest assurance level.</td>
+    </tr>
+</table>
+
+<h2 data-id="649">7.2. Validation Requirements</h2>
+
+<ul data-id="650">
+    <li data-id="651">The <code data-id="652">assurance_level</code> field <span data-id="653" class="keyword">MUST</span> contain exactly one of the four enumerated value strings. Any other value <span data-id="654" class="keyword">MUST</span> cause envelope rejection with error <code data-id="655">gap_malformed</code>.</li>
+    <li data-id="656">Enforcement Points <span data-id="657" class="keyword">MUST</span> validate that the claimed <code data-id="658">assurance_level</code> is consistent with the presented key material and identity attestation. For example: an envelope claiming <code data-id="659">"hardware-bound"</code> <span data-id="660" class="keyword">MUST</span> present an attestation certificate chain rooting in a recognized hardware manufacturer's Certificate Authority. An envelope claiming <code data-id="661">"domain-validated"</code> <span data-id="662" class="keyword">MUST</span> present a certificate or SPIFFE SVID bound to a verified domain.</li>
+    <li data-id="663">Implementations <span data-id="664" class="keyword">MUST NOT</span> treat <code data-id="665">assurance_level</code> as a free-form string. Case-sensitive exact matching is <span data-id="666" class="keyword">REQUIRED</span>. The value <code data-id="667">"Hardware-Bound"</code> or <code data-id="668">"HARDWARE-BOUND"</code> <span data-id="669" class="keyword">MUST</span> be rejected.</li>
+</ul>
+
+<h2 data-id="670">7.3. Downgrade Resistance</h2>
+
+<p data-id="671">Once an Enforcement Point has observed an agent operating at a given assurance level, it <span data-id="672" class="keyword">SHOULD</span> record that level as the agent's "high-water mark." Subsequent envelopes from the same <code data-id="673">agent_id</code> presenting a <strong data-id="674">lower</strong> assurance level <span data-id="675" class="keyword">SHOULD</span> trigger a policy alert and <span data-id="676" class="keyword">MAY</span> be rejected, depending on local policy.</p>
+
+<p data-id="677">This mechanism provides downgrade resistance: an attacker who compromises a software-based signing key cannot silently downgrade from <code data-id="678">"hardware-bound"</code> to <code data-id="679">"self-asserted"</code> without detection. The EP's assurance-level history for each agent provides a signal that something has changed and warrants investigation.</p>
+
+<p data-id="680">Enforcement Points <span data-id="681" class="keyword">SHOULD</span> log all observed assurance-level transitions for auditing purposes.</p>
+
+<h2 data-id="682">7.4. Minimum Assurance Policies</h2>
+
+<p data-id="683">Enforcement Points <span data-id="684" class="keyword">MAY</span> define minimum assurance-level requirements per target, per action, or per action-target combination. An envelope whose <code data-id="685">assurance_level</code> does not meet the minimum <span data-id="686" class="keyword">MUST</span> be rejected with error <code data-id="687">gap_assurance_insufficient</code> and <span data-id="688" class="keyword">SHOULD</span> include an indication of the required level in the error response body.</p>
+
+<p data-id="689">Example: An EP protecting a financial-transactions API might require <code data-id="690">"hardware-bound"</code> for <code data-id="691">action: "transfer_funds"</code> but accept <code data-id="692">"domain-validated"</code> for <code data-id="693">action: "query_balance"</code>.</p>
+
+<!-- ============================================================ -->
+<!-- 8. NONCE AND REPLAY PROTECTION -->
+<!-- ============================================================ -->
+
+<h1 data-id="694">8. Nonce and Replay Protection</h1>
+
+<h2 data-id="695">8.1. Nonce Generation</h2>
+
+<ul data-id="696">
+    <li data-id="697">The <code data-id="698">nonce</code> field <span data-id="699" class="keyword">MUST</span> contain a value with at least 128 bits of entropy, generated by a Cryptographically Secure Pseudo-Random Number Generator (CSPRNG).</li>
+    <li data-id="700">The nonce <span data-id="701" class="keyword">MUST</span> be encoded as a base64url string per RFC 4648 [RFC4648] Section 5, without padding characters.</li>
+    <li data-id="702">A 128-bit (16-byte) random value produces a 22-character base64url string. Implementations <span data-id="703" class="keyword">MAY</span> use longer nonces (e.g., 256 bits / 32 bytes / 43 characters).</li>
+    <li data-id="704">Nonces <span data-id="705" class="keyword">MUST</span> be unique per envelope. Reuse of a nonce with different envelope contents is a protocol violation.</li>
+    <li data-id="706">Implementations <span data-id="707" class="keyword">MUST NOT</span> use predictable values (timestamps, counters, sequential identifiers, UUIDs) as the sole source of nonce material. Predictable nonces enable precomputation attacks where an adversary generates valid-looking envelopes before the legitimate agent acts.</li>
+    <li data-id="708">Implementations <span data-id="709" class="keyword">MAY</span> combine random bytes with other data (e.g., a timestamp prefix) provided that at least 128 bits are derived from a CSPRNG.</li>
+</ul>
+
+<h2 data-id="710">8.2. Replay Window</h2>
+
+<ul data-id="711">
+    <li data-id="712">Enforcement Points <span data-id="713" class="keyword">MUST</span> maintain a replay-detection cache that stores the tuple (<code data-id="714">agent_id</code>, <code data-id="715">nonce</code>) for each verified envelope.</li>
+    <li data-id="716">The <span data-id="717" class="keyword">RECOMMENDED</span> replay-window duration is 300 seconds (5 minutes).</li>
+    <li data-id="718">Implementations <span data-id="719" class="keyword">MAY</span> configure different window durations, but <span data-id="720" class="keyword">MUST NOT</span> set the window below 60 seconds (to accommodate reasonable clock skew and network latency) and <span data-id="721" class="keyword">SHOULD NOT</span> exceed 3,600 seconds (to limit cache growth and memory consumption).</li>
+    <li data-id="722">An envelope whose <code data-id="723">issued_at</code> timestamp falls outside the replay window — i.e., <code data-id="724">issued_at</code> &lt; now - replay_window <strong data-id="725">OR</strong> <code data-id="726">issued_at</code> &gt; now + max_clock_skew — <span data-id="727" class="keyword">MUST</span> be rejected with error <code data-id="728">gap_expired</code>.</li>
+    <li data-id="729">If an (<code data-id="730">agent_id</code>, <code data-id="731">nonce</code>) tuple matching an incoming envelope already exists in the replay cache, the envelope <span data-id="732" class="keyword">MUST</span> be rejected with error <code data-id="733">gap_replay</code>.</li>
+    <li data-id="734">Cache entries <span data-id="735" class="keyword">MUST</span> be retained for the full duration of the replay window and <span data-id="736" class="keyword">SHOULD</span> be purged promptly after expiry to conserve resources.</li>
+</ul>
+
+<h2 data-id="737">8.3. Clock Skew Tolerance</h2>
+
+<ul data-id="738">
+    <li data-id="739">Implementations <span data-id="740" class="keyword">MUST</span> allow for clock skew between the Agent and the Enforcement Point.</li>
+    <li data-id="741">The <span data-id="742" class="keyword">RECOMMENDED</span> maximum clock-skew tolerance is 30 seconds.</li>
+    <li data-id="743">Implementations <span data-id="744" class="keyword">SHOULD</span> use NTP or similar time-synchronization protocols (e.g., PTP, roughtime) to minimize clock skew between components.</li>
+    <li data-id="745">Clock-skew tolerance is applied when evaluating temporal validity: an envelope is temporally valid if <code data-id="746">issued_at</code> - max_clock_skew &lt;= now &lt;= <code data-id="747">expires_at</code> + max_clock_skew.</li>
+</ul>
+
+<h2 data-id="748">8.4. Distributed Replay Detection</h2>
+
+<p data-id="749">In distributed EP deployments (e.g., multiple EP instances behind a load balancer), replay caches <span data-id="750" class="keyword">MUST</span> be synchronized or shared across all EP instances that may receive envelopes from the same agent. Failure to synchronize replay caches creates a vulnerability where an attacker can replay an envelope to a different EP instance that has not yet recorded the nonce.</p>
+
+<p data-id="751">Common approaches to distributed replay detection include:</p>
+
+<ul data-id="752">
+    <li data-id="753">A shared, replicated cache (e.g., Redis Cluster, Memcached with replication).</li>
+    <li data-id="754">Consistent hashing to route all envelopes from a given <code data-id="755">agent_id</code> to the same EP instance (note: this introduces a single-point-of-failure risk).</li>
+    <li data-id="756">A centralized nonce-check service with low-latency access from all EP instances.</li>
+</ul>
+
+<p data-id="757">Implementers <span data-id="758" class="keyword">SHOULD</span> evaluate the latency and consistency characteristics of their chosen approach against their throughput requirements and threat model.</p>
+
+<!-- ============================================================ -->
+<!-- 9. ALGORITHM AGILITY -->
+<!-- ============================================================ -->
+
+<h1 data-id="759">9. Algorithm Agility</h1>
+
+<h2 data-id="760">9.1. Design Principles</h2>
+
+<p data-id="761">GAP's algorithm agility framework ensures that the protocol can adapt to evolving cryptographic requirements without breaking backward compatibility. The framework provides:</p>
+
+<ul data-id="762">
+    <li data-id="763">A registry of approved algorithms with lifecycle states governing their use.</li>
+    <li data-id="764">Mandatory-to-implement cipher suites ensuring baseline interoperability across all implementations.</li>
+    <li data-id="765">A deprecation mechanism for transitioning away from weakened algorithms in a controlled manner.</li>
+    <li data-id="766">Negotiation rules for environments where Agents and Enforcement Points support multiple algorithms.</li>
+</ul>
+
+<h2 data-id="767">9.2. Algorithm Registry</h2>
+
+<p data-id="768">The GAP Algorithm Registry (Section 12.5) contains one entry per approved algorithm. Each entry has the following fields:</p>
+
+<table data-id="769">
+    <tr data-id="770"><th data-id="771">Field</th><th data-id="772">Description</th></tr>
+    <tr data-id="773"><td data-id="774">Algorithm Identifier</td><td data-id="775">JWA name (for JWS) or COSE algorithm ID (for COSE)</td></tr>
+    <tr data-id="776"><td data-id="777">Lifecycle State</td><td data-id="778">One of: <span data-id="779" class="keyword">MANDATORY</span>, <span data-id="780" class="keyword">RECOMMENDED</span>, <span data-id="781" class="keyword">OPTIONAL</span>, <span data-id="782" class="keyword">DEPRECATED</span>, <span data-id="783" class="keyword">PROHIBITED</span></td></tr>
+    <tr data-id="784"><td data-id="785">Effective Date</td><td data-id="786">Date the current lifecycle state became effective</td></tr>
+    <tr data-id="787"><td data-id="788">Minimum Key Size</td><td data-id="789">Minimum cryptographic key size in bits (where applicable)</td></tr>
+    <tr data-id="790"><td data-id="791">Reference</td><td data-id="792">Normative reference for the algorithm specification</td></tr>
+</table>
+
+<p data-id="793">Lifecycle states are ordered: <span data-id="794" class="keyword">MANDATORY</span> > <span data-id="795" class="keyword">RECOMMENDED</span> > <span data-id="796" class="keyword">OPTIONAL</span> > <span data-id="797" class="keyword">DEPRECATED</span> > <span data-id="798" class="keyword">PROHIBITED</span>. Algorithms transition through these states over time as cryptographic best practices evolve.</p>
+
+<h2 data-id="799">9.3. Mandatory-to-Implement Algorithms</h2>
+
+<p data-id="800">The following algorithms are <span data-id="801" class="keyword">MANDATORY</span> for all GAP implementations. Every conforming implementation <span data-id="802" class="keyword">MUST</span> support both signing and verification for these algorithms.</p>
+
+<p data-id="803"><strong data-id="804">For JWS:</strong></p>
+
+<table data-id="805">
+    <tr data-id="806"><th data-id="807">Algorithm</th><th data-id="808">JWA Name</th><th data-id="809">Key Type</th><th data-id="810">Min Key Size</th><th data-id="811">State</th></tr>
+    <tr data-id="812"><td data-id="813">ECDSA P-256 with SHA-256</td><td data-id="814">ES256</td><td data-id="815">EC (P-256)</td><td data-id="816">256 bits</td><td data-id="817"><span data-id="818" class="keyword">MANDATORY</span></td></tr>
+    <tr data-id="819"><td data-id="820">EdDSA with Ed25519</td><td data-id="821">EdDSA</td><td data-id="822">OKP (Ed25519)</td><td data-id="823">256 bits</td><td data-id="824"><span data-id="825" class="keyword">MANDATORY</span></td></tr>
+</table>
+
+<p data-id="826"><strong data-id="827">For COSE:</strong></p>
+
+<table data-id="828">
+    <tr data-id="829"><th data-id="830">Algorithm</th><th data-id="831">COSE ID</th><th data-id="832">Key Type</th><th data-id="833">Min Key Size</th><th data-id="834">State</th></tr>
+    <tr data-id="835"><td data-id="836">ECDSA w/ SHA-256</td><td data-id="837">-7 (ES256)</td><td data-id="838">EC2 (P-256)</td><td data-id="839">256 bits</td><td data-id="840"><span data-id="841" class="keyword">MANDATORY</span></td></tr>
+    <tr data-id="842"><td data-id="843">EdDSA</td><td data-id="844">-8 (EdDSA)</td><td data-id="845">OKP (Ed25519)</td><td data-id="846">256 bits</td><td data-id="847"><span data-id="848" class="keyword">MANDATORY</span></td></tr>
+</table>
+
+<p data-id="849"><strong data-id="850"><span data-id="851" class="keyword">RECOMMENDED</span> algorithms</strong> (implementations <span data-id="852" class="keyword">SHOULD</span> support):</p>
+
+<ul data-id="853">
+    <li data-id="854"><strong data-id="855">ES384</strong> — ECDSA P-384 with SHA-384 (EC key, minimum 384 bits)</li>
+    <li data-id="856"><strong data-id="857">PS256</strong> — RSASSA-PSS with SHA-256 (RSA key, minimum 2,048 bits)</li>
+</ul>
+
+<p data-id="858"><strong data-id="859"><span data-id="860" class="keyword">DEPRECATED</span> algorithms</strong> (<span data-id="861" class="keyword">MUST NOT</span> be used for new envelopes; <span data-id="862" class="keyword">MAY</span> be accepted for verification during transition):</p>
+
+<ul data-id="863">
+    <li data-id="864"><strong data-id="865">RS256</strong> — RSASSA-PKCS1-v1_5 with SHA-256. Deprecated due to known padding-oracle concerns and the availability of superior alternatives (PS256, ES256).</li>
+</ul>
+
+<p data-id="866"><strong data-id="867"><span data-id="868" class="keyword">PROHIBITED</span> algorithms</strong> (<span data-id="869" class="keyword">MUST NOT</span> be used, <span data-id="870" class="keyword">MUST NOT</span> be accepted):</p>
+
+<ul data-id="871">
+    <li data-id="872"><strong data-id="873">none</strong> — The unsecured algorithm. Permitting <code data-id="874">"none"</code> would allow unsigned envelopes, completely undermining the protocol's security model.</li>
+    <li data-id="875"><strong data-id="876">HS256, HS384, HS512</strong> — Symmetric HMAC algorithms. These are inappropriate for the agent-to-EP trust model because they require the Agent and EP to share a secret key, which violates the asymmetric-key assumption of GAP.</li>
+</ul>
+
+<h2 data-id="877">9.4. Algorithm Negotiation</h2>
+
+<p data-id="878">When an Agent and Enforcement Point support multiple algorithms, the following negotiation rules apply:</p>
+
+<ol data-id="879">
+    <li data-id="880">The Agent selects its preferred algorithm and includes it in the <code data-id="881">signing_algorithm</code> field of the envelope and in the JWS <code data-id="882">alg</code> header or COSE Algorithm header parameter.</li>
+    <li data-id="883">The EP <span data-id="884" class="keyword">MUST</span> verify using the algorithm specified in the envelope. The EP <span data-id="885" class="keyword">MUST NOT</span> substitute a different algorithm. Algorithm substitution is a known attack vector (Section 11.6).</li>
+    <li data-id="886">If the EP does not support the specified algorithm, it <span data-id="887" class="keyword">MUST</span> reject the envelope with error <code data-id="888">gap_algorithm_rejected</code> and <span data-id="889" class="keyword">SHOULD</span> include a list of its supported algorithms in the error response.</li>
+    <li data-id="890">The EP <span data-id="891" class="keyword">SHOULD</span> advertise its supported algorithms via a discovery endpoint (<code data-id="892">/.well-known/gap-configuration</code>) or equivalent out-of-band mechanism. The discovery document format is defined in Section 12.4.</li>
+</ol>
+
+<h2 data-id="893">9.5. Deprecation Lifecycle</h2>
+
+<p data-id="894">Algorithm deprecation follows a three-phase lifecycle:</p>
+
+<ol data-id="895">
+    <li data-id="896"><strong data-id="897">Announcement</strong> (minimum 6 months): The algorithm is marked <span data-id="898" class="keyword">DEPRECATED</span> in the GAP Algorithm Registry. Implementations <span data-id="899" class="keyword">SHOULD</span> begin migrating to alternative algorithms. New deployments <span data-id="900" class="keyword">SHOULD NOT</span> use the deprecated algorithm for signing.</li>
+    <li data-id="901"><strong data-id="902">Signing Prohibition</strong> (minimum 12 months after announcement): The algorithm <span data-id="903" class="keyword">MUST NOT</span> be used for creating new envelopes. Enforcement Points <span data-id="904" class="keyword">MAY</span> still accept it for verification of previously signed envelopes during the transition period.</li>
+    <li data-id="905"><strong data-id="906">Full Prohibition</strong>: The algorithm is marked <span data-id="907" class="keyword">PROHIBITED</span> in the registry. Enforcement Points <span data-id="908" class="keyword">MUST</span> reject envelopes using this algorithm. No grace period applies.</li>
+</ol>
+
+<p data-id="909">The minimum timelines above allow the ecosystem sufficient time to transition. Specific deprecation timelines for each algorithm are recorded in the GAP Algorithm Registry.</p>
+
+<h2 data-id="910">9.6. Post-Quantum Considerations</h2>
+
+<p data-id="911">This specification does not mandate post-quantum algorithms at this time. The current mandatory-to-implement algorithms (ES256, EdDSA) are based on elliptic-curve cryptography and are believed to be secure against classical adversaries but are vulnerable to quantum attack using Shor's algorithm.</p>
+
+<p data-id="912">Implementations <span data-id="913" class="keyword">SHOULD</span> monitor NIST post-quantum standardization efforts, specifically:</p>
+
+<ul data-id="914">
+    <li data-id="915"><strong data-id="916">ML-DSA</strong> (Module-Lattice-Based Digital Signature Algorithm, FIPS 204 [FIPS204])</li>
+    <li data-id="917"><strong data-id="918">SLH-DSA</strong> (Stateless Hash-Based Digital Signature Algorithm, FIPS 205 [FIPS205])</li>
+</ul>
+
+<p data-id="919">Future versions of GAP will incorporate ML-DSA or SLH-DSA as mandatory-to-implement algorithms when ecosystem readiness permits — specifically, when major cryptographic libraries, hardware security modules, and deployment platforms provide stable support for these algorithms.</p>
+
+<!-- ============================================================ -->
+<!-- 10. TRANSPORT BINDING -->
+<!-- ============================================================ -->
+
+<h1 data-id="920">10. Transport Binding</h1>
+
+<h2 data-id="921">10.1. HTTP Transport</h2>
+
+<p data-id="922">When GAP is used over HTTP, the following transport binding applies:</p>
+
+<ul data-id="923">
+    <li data-id="924">The signed envelope <span data-id="925" class="keyword">MUST</span> be transmitted in the <code data-id="926">GAP-Authorization</code> HTTP header field. The header value is the JWS Compact Serialization (with detached payload, i.e., <code data-id="927">header..signature</code>) or the base64url-encoded COSE_Sign1 structure.</li>
+    <li data-id="928">The envelope body (from which the canonical form is reconstructed by the EP) <span data-id="929" class="keyword">MUST</span> be transmitted as the HTTP request body.</li>
+    <li data-id="930">For JWS-based deployments, the Content-Type <span data-id="931" class="keyword">MUST</span> be <code data-id="932">application/gap+json</code>.</li>
+    <li data-id="933">For COSE-based deployments, the Content-Type <span data-id="934" class="keyword">MUST</span> be <code data-id="935">application/gap+cbor</code>.</li>
+    <li data-id="936">Implementations <span data-id="937" class="keyword">SHOULD</span> use HTTP/2 or HTTP/3 to benefit from header compression and multiplexing.</li>
+    <li data-id="938">Transport-layer encryption (TLS 1.3 or later) <span data-id="939" class="keyword">SHOULD</span> be used to protect envelopes in transit. Note that TLS provides confidentiality and transport integrity but does not replace GAP's application-layer authorization semantics.</li>
+</ul>
+
+<h2 data-id="940">10.2. Error Responses</h2>
+
+<p data-id="941">Enforcement Points <span data-id="942" class="keyword">MUST</span> return appropriate HTTP error responses when envelope verification fails. The following error codes are defined:</p>
+
+<table data-id="943">
+    <tr data-id="944"><th data-id="945">HTTP Status</th><th data-id="946">Error Code</th><th data-id="947">Description</th></tr>
+    <tr data-id="948"><td data-id="949">400</td><td data-id="950"><code data-id="951">gap_malformed</code></td><td data-id="952">Envelope structurally invalid: missing <span data-id="953" class="keyword">REQUIRED</span> fields, incorrect types, or unparseable content.</td></tr>
+    <tr data-id="954"><td data-id="955">400</td><td data-id="956"><code data-id="957">gap_params_exceeded</code></td><td data-id="958"><code data-id="959">action_params</code> exceeds structural constraints (Section 6.2): depth, size, type violations.</td></tr>
+    <tr data-id="960"><td data-id="961">401</td><td data-id="962"><code data-id="963">gap_invalid_signature</code></td><td data-id="964">Signature verification failed. The cryptographic signature does not match the reconstructed canonical form.</td></tr>
+    <tr data-id="965"><td data-id="966">401</td><td data-id="967"><code data-id="968">gap_expired</code></td><td data-id="969">Envelope has expired: <code data-id="970">expires_at</code> is in the past, or <code data-id="971">issued_at</code> is outside the replay window.</td></tr>
+    <tr data-id="972"><td data-id="973">401</td><td data-id="974"><code data-id="975">gap_replay</code></td><td data-id="976">Nonce replay detected: the (<code data-id="977">agent_id</code>, <code data-id="978">nonce</code>) tuple is already present in the replay cache.</td></tr>
+    <tr data-id="979"><td data-id="980">401</td><td data-id="981"><code data-id="982">gap_algorithm_rejected</code></td><td data-id="983">Signing algorithm not supported, <span data-id="984" class="keyword">DEPRECATED</span> (for new envelopes), or <span data-id="985" class="keyword">PROHIBITED</span>.</td></tr>
+    <tr data-id="986"><td data-id="987">403</td><td data-id="988"><code data-id="989">gap_assurance_insufficient</code></td><td data-id="990">Assurance level below the minimum required for the target/action combination.</td></tr>
+    <tr data-id="991"><td data-id="992">403</td><td data-id="993"><code data-id="994">gap_policy_denied</code></td><td data-id="995">Policy evaluation denied the action. The envelope is valid but the policy does not authorize the requested operation.</td></tr>
+    <tr data-id="996"><td data-id="997">422</td><td data-id="998"><code data-id="999">gap_canonicalization_mismatch</code></td><td data-id="1000">Reconstructed canonical form does not match signed content. Indicates potential tampering or implementation error.</td></tr>
+</table>
+
+<p data-id="1001">Error responses <span data-id="1002" class="keyword">SHOULD</span> include a JSON body with fields <code data-id="1003">"error"</code> (the error code string) and <code data-id="1004">"error_description"</code> (a human-readable explanation). Error responses <span data-id="1005" class="keyword">MUST NOT</span> include information that would assist an attacker (e.g., partial signature data, internal key identifiers, or stack traces).</p>
+
+<!-- ============================================================ -->
+<!-- 11. SECURITY CONSIDERATIONS -->
+<!-- ============================================================ -->
+
+<h1 data-id="1006">11. Security Considerations</h1>
+
+<h2 data-id="1007">11.1. Threat Model</h2>
+
+<p data-id="1008">GAP is designed to mitigate the following threats:</p>
+
+<ul data-id="1009">
+    <li data-id="1010"><strong data-id="1011">Replay Attacks</strong>: An adversary captures a valid signed envelope and resubmits it to the EP. Mitigated by nonce uniqueness and the replay-window cache (Section 8).</li>
+    <li data-id="1012"><strong data-id="1013">Signature Forgery</strong>: An adversary attempts to create a valid envelope without possession of the Agent's private key. Mitigated by mandatory asymmetric digital signatures using approved algorithms (Section 9).</li>
+    <li data-id="1014"><strong data-id="1015">Parameter Tampering</strong>: An adversary modifies envelope fields (e.g., changing <code data-id="1016">action</code> from <code data-id="1017">"read"</code> to <code data-id="1018">"delete"</code>) after signing. Mitigated by the signing scope covering all <span data-id="1019" class="keyword">REQUIRED</span> fields (Section 5.4) and canonical verification at the EP.</li>
+    <li data-id="1020"><strong data-id="1021">Assurance-Level Downgrade</strong>: An adversary who has compromised a software key attempts to operate at a lower assurance level to avoid detection. Mitigated by downgrade-resistance monitoring (Section 7.3).</li>
+    <li data-id="1022"><strong data-id="1023">Algorithm Substitution</strong>: An adversary modifies the algorithm identifier to force verification with a weaker algorithm. Mitigated by including the algorithm in the signed scope and by prohibiting algorithm inference (Section 11.6).</li>
+    <li data-id="1024"><strong data-id="1025">Timing Attacks</strong>: An adversary observes verification duration to infer information about the key or signature. Mitigated by using constant-time signature verification routines, as mandated by the underlying JWS and COSE libraries.</li>
+    <li data-id="1026"><strong data-id="1027">Envelope Stripping</strong>: An adversary removes the <code data-id="1028">GAP-Authorization</code> header entirely, causing the request to bypass authorization. Mitigated by EP policy: EPs <span data-id="1029" class="keyword">MUST</span> reject requests without valid GAP envelopes for protected resources.</li>
+</ul>
+
+<h2 data-id="1030">11.2. Canonicalization Security</h2>
+
+<p data-id="1031">Deterministic canonicalization is essential to GAP's security model. Without it, two valid JSON serializations of the same logical object (e.g., differing in whitespace or key order) would produce different signature inputs, creating multiple valid signatures for the same logical envelope. An attacker could exploit this ambiguity by re-serializing an envelope in a different form, changing the canonical bytes without changing the logical content, and causing signature verification to fail or produce inconsistent results.</p>
+
+<p data-id="1032">JCS (RFC 8785) and CBOR Deterministic Encoding (RFC 8949) eliminate this class of vulnerability by ensuring that any two compliant implementations produce identical byte sequences for the same logical input. Implementations <span data-id="1033" class="keyword">MUST</span> use well-tested, specification-compliant canonicalization libraries. Custom implementations are strongly discouraged due to the subtlety of Unicode normalization, number serialization, and key-sorting edge cases.</p>
+
+<h2 data-id="1034">11.3. Nonce Security</h2>
+
+<p data-id="1035">The 128-bit entropy requirement for nonces provides strong collision resistance. By the birthday bound, the probability of a nonce collision is less than 2^-64 after 2^32 (approximately 4.3 billion) envelopes. This is well within acceptable bounds for any practical deployment.</p>
+
+<p data-id="1036">The CSPRNG requirement prevents prediction and precomputation attacks. If nonces were predictable (e.g., sequential counters), an adversary could precompute envelopes with future nonces, undermining replay protection. Implementations <span data-id="1037" class="keyword">MUST</span> use the operating system's CSPRNG (e.g., <code data-id="1038">/dev/urandom</code>, <code data-id="1039">CryptGenRandom</code>, <code data-id="1040">getrandom(2)</code>).</p>
+
+<h2 data-id="1041">11.4. Replay Protection Limitations</h2>
+
+<p data-id="1042">Replay windows create a fundamental tradeoff between cache cost and protection duration. A 300-second window requires storing up to 300 × (peak_envelopes_per_second) nonce entries. For a system processing 10,000 envelopes per second, this is approximately 3 million entries — manageable for in-memory caches but significant for resource-constrained environments.</p>
+
+<p data-id="1043">Distributed cache synchronization introduces latency and potential consistency gaps. During the propagation delay, a replay may succeed against a different EP instance. Operators <span data-id="1044" class="keyword">SHOULD</span> size replay caches for expected throughput and <span data-id="1045" class="keyword">SHOULD</span> monitor cache hit rates to detect replay-attack attempts.</p>
+
+<h2 data-id="1046">11.5. Key Management</h2>
+
+<p data-id="1047"><strong data-id="1048">Key Compromise:</strong> If an Agent's private key is compromised, all envelopes signed with that key are suspect. Enforcement Points <span data-id="1049" class="keyword">SHOULD</span> support key revocation mechanisms (e.g., CRL, OCSP, or out-of-band revocation notification). Upon learning of a compromise, the affected key <span data-id="1050" class="keyword">MUST</span> be revoked and all EP instances <span data-id="1051" class="keyword">MUST</span> be updated to reject the compromised <code data-id="1052">key_id</code>.</p>
+
+<p data-id="1053"><strong data-id="1054">Key Rotation:</strong> Agents <span data-id="1055" class="keyword">SHOULD</span> rotate signing keys periodically (e.g., every 90 days). During rotation, EPs <span data-id="1056" class="keyword">SHOULD</span> support overlapping key validity periods to allow a smooth transition. The Agent may sign with the new key while the EP still accepts both old and new keys.</p>
+
+<p data-id="1057"><strong data-id="1058">Hardware-Bound Keys:</strong> Hardware-bound keys (HSM, TPM, secure enclave) mitigate extraction risk by ensuring the private key never leaves the hardware boundary. This is the strongest form of key protection and corresponds to the <code data-id="1059">"hardware-bound"</code> assurance level (Section 7.1).</p>
+
+<h2 data-id="1060">11.6. Algorithm Substitution Attacks</h2>
+
+<p data-id="1061">The signing algorithm is included in the signing scope (via the <code data-id="1062">signing_algorithm</code> field in the envelope and the <code data-id="1063">alg</code> header in JWS/COSE). This prevents algorithm substitution attacks where an adversary modifies the algorithm identifier to force verification with a weaker algorithm.</p>
+
+<p data-id="1064">Enforcement Points <span data-id="1065" class="keyword">MUST NOT</span> infer the algorithm from the key type alone. For example, an EP <span data-id="1066" class="keyword">MUST NOT</span> see an EC P-256 key and assume ES256 — the algorithm <span data-id="1067" class="keyword">MUST</span> be taken from the envelope's <code data-id="1068">signing_algorithm</code> field and the JWS/COSE header, and both <span data-id="1069" class="keyword">MUST</span> match.</p>
+
+<h2 data-id="1070">11.7. Denial of Service</h2>
+
+<p data-id="1071">The <code data-id="1072">action_params</code> size and depth limits (Section 6.2) prevent resource exhaustion during parsing and canonicalization. Without these limits, an attacker could submit envelopes with deeply nested or extremely large parameter objects designed to consume CPU and memory during JSON/CBOR parsing.</p>
+
+<p data-id="1073">Structural validation before cryptographic verification (Section 6.3) reduces the cost of processing malformed envelopes. Cryptographic signature verification is computationally expensive; performing it only after confirming structural validity ensures that malformed payloads are rejected cheaply.</p>
+
+<p data-id="1074">Rate limiting <span data-id="1075" class="keyword">SHOULD</span> be applied per <code data-id="1076">agent_id</code> at the Enforcement Point to prevent a compromised or malicious agent from flooding the EP with verification requests.</p>
+
+<h2 data-id="1077">11.8. Privacy Considerations</h2>
+
+<p data-id="1078">Authorization envelopes contain <code data-id="1079">agent_id</code> and <code data-id="1080">principal_id</code>, which may be sensitive identifiers. If envelopes are transmitted without transport encryption, these identifiers are exposed to network observers.</p>
+
+<ul data-id="1081">
+    <li data-id="1082">Transport encryption (TLS 1.3 or later) <span data-id="1083" class="keyword">SHOULD</span> be used to protect envelopes in transit.</li>
+    <li data-id="1084">Logs containing envelopes <span data-id="1085" class="keyword">SHOULD</span> redact or hash <code data-id="1086">principal_id</code> per applicable data-protection requirements (e.g., GDPR, CCPA).</li>
+    <li data-id="1087">Implementations <span data-id="1088" class="keyword">SHOULD</span> consider using pseudonymous or pairwise identifiers for <code data-id="1089">agent_id</code> and <code data-id="1090">principal_id</code> where full identification is not required.</li>
+    <li data-id="1091">Replay-detection caches contain (<code data-id="1092">agent_id</code>, <code data-id="1093">nonce</code>) tuples, which could reveal agent activity patterns. Caches <span data-id="1094" class="keyword">SHOULD</span> be protected with appropriate access controls.</li>
+</ul>
+
+<!-- ============================================================ -->
+<!-- 12. IANA CONSIDERATIONS -->
+<!-- ============================================================ -->
+
+<h1 data-id="1095">12. IANA Considerations</h1>
+
+<h2 data-id="1096">12.1. Media Types</h2>
+
+<p data-id="1097">This specification requests registration of two media types:</p>
+
+<p data-id="1098"><strong data-id="1099">application/gap+json</strong></p>
+<ul data-id="1100">
+    <li data-id="1101">Type name: application</li>
+    <li data-id="1102">Subtype name: gap+json</li>
+    <li data-id="1103">Required parameters: none</li>
+    <li data-id="1104">Optional parameters: none</li>
+    <li data-id="1105">Encoding considerations: 8bit; UTF-8 encoding is used.</li>
+    <li data-id="1106">Security considerations: See Section 11 of this document.</li>
+    <li data-id="1107">Published specification: This document.</li>
+</ul>
+
+<p data-id="1108"><strong data-id="1109">application/gap+cbor</strong></p>
+<ul data-id="1110">
+    <li data-id="1111">Type name: application</li>
+    <li data-id="1112">Subtype name: gap+cbor</li>
+    <li data-id="1113">Required parameters: none</li>
+    <li data-id="1114">Optional parameters: none</li>
+    <li data-id="1115">Encoding considerations: binary.</li>
+    <li data-id="1116">Security considerations: See Section 11 of this document.</li>
+    <li data-id="1117">Published specification: This document.</li>
+</ul>
+
+<h2 data-id="1118">12.2. HTTP Header Fields</h2>
+
+<p data-id="1119">This specification requests registration of the following HTTP header field in the "Hypertext Transfer Protocol (HTTP) Field Name Registry" maintained by IANA:</p>
+
+<table data-id="1120">
+    <tr data-id="1121"><th data-id="1122">Field Name</th><th data-id="1123">Status</th><th data-id="1124">Reference</th></tr>
+    <tr data-id="1125"><td data-id="1126">GAP-Authorization</td><td data-id="1127">permanent</td><td data-id="1128">Section 10.1 of this document</td></tr>
+</table>
+
+<h2 data-id="1129">12.3. COSE Header Parameter</h2>
+
+<p data-id="1130">This specification requests registration of the following entry in the "COSE Header Parameters" registry:</p>
+
+<table data-id="1131">
+    <tr data-id="1132"><th data-id="1133">Label</th><th data-id="1134">Name</th><th data-id="1135">Value Type</th><th data-id="1136">Description</th><th data-id="1137">Reference</th></tr>
+    <tr data-id="1138"><td data-id="1139">-65537</td><td data-id="1140">gap_ver</td><td data-id="1141">tstr</td><td data-id="1142">GAP Protocol Version</td><td data-id="1143">Section 5.3.2 of this document</td></tr>
+</table>
+
+<h2 data-id="1144">12.4. Well-Known URI</h2>
+
+<p data-id="1145">This specification requests registration of the following well-known URI in the "Well-Known URIs" registry:</p>
+
+<table data-id="1146">
+    <tr data-id="1147"><th data-id="1148">URI Suffix</th><th data-id="1149">Change Controller</th><th data-id="1150">Reference</th></tr>
+    <tr data-id="1151"><td data-id="1152">gap-configuration</td><td data-id="1153">IETF</td><td data-id="1154">This document</td></tr>
+</table>
+
+<p data-id="1155">The <code data-id="1156">/.well-known/gap-configuration</code> endpoint returns a JSON document describing the EP's supported algorithms, protocol version, and capabilities.</p>
+
+<h2 data-id="1157">12.5. GAP Algorithm Registry</h2>
+
+<p data-id="1158">This specification requests creation of a new "GAP Algorithm Registry" under IANA. The registry contains the following columns:</p>
+
+<table data-id="1159">
+    <tr data-id="1160"><th data-id="1161">Column</th><th data-id="1162">Description</th></tr>
+    <tr data-id="1163"><td data-id="1164">Algorithm ID</td><td data-id="1165">Unique identifier (JWA name or COSE algorithm ID)</td></tr>
+    <tr data-id="1166"><td data-id="1167">JWA/COSE Name</td><td data-id="1168">Human-readable algorithm name</td></tr>
+    <tr data-id="1169"><td data-id="1170">Lifecycle State</td><td data-id="1171">One of: MANDATORY, RECOMMENDED, OPTIONAL, DEPRECATED, PROHIBITED</td></tr>
+    <tr data-id="1172"><td data-id="1173">Effective Date</td><td data-id="1174">Date the current lifecycle state became effective</td></tr>
+    <tr data-id="1175"><td data-id="1176">Minimum Key Size</td><td data-id="1177">Minimum key size in bits</td></tr>
+    <tr data-id="1178"><td data-id="1179">Reference</td><td data-id="1180">Reference to the algorithm specification</td></tr>
+</table>
+
+<p data-id="1181">Initial entries are populated from Section 9.3 of this document. Future entries are added via the Specification Required registration policy as defined in RFC 8126.</p>
+
+<!-- ============================================================ -->
+<!-- 13. REFERENCES -->
+<!-- ============================================================ -->
+
+<h1 data-id="1182">13. References</h1>
+
+<h2 data-id="1183">13.1. Normative References</h2>
+
+<p data-id="1184"><strong data-id="1185">[RFC2119]</strong> Bradner, S., "Key words for use in RFCs to Indicate Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</p>
+
+<p data-id="1186"><strong data-id="1187">[RFC3339]</strong> Klyne, G. and C. Newman, "Date and Time on the Internet: Timestamps", RFC 3339, DOI 10.17487/RFC3339, July 2002.</p>
+
+<p data-id="1188"><strong data-id="1189">[RFC4648]</strong> Josefsson, S., "The Base16, Base32, and Base64 Data Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006.</p>
+
+<p data-id="1190"><strong data-id="1191">[RFC7515]</strong> Jones, M., Bradley, J., and N. Sakimura, "JSON Web Signature (JWS)", RFC 7515, DOI 10.17487/RFC7515, May 2015.</p>
+
+<p data-id="1192"><strong data-id="1193">[RFC7797]</strong> Jones, M., "JSON Web Signature (JWS) Unencoded Payload Option", RFC 7797, DOI 10.17487/RFC7797, February 2016.</p>
+
+<p data-id="1194"><strong data-id="1195">[RFC8174]</strong> Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174, May 2017.</p>
+
+<p data-id="1196"><strong data-id="1197">[RFC8785]</strong> Rundgren, A., Jordan, B., and S. Erdtman, "JSON Canonicalization Scheme (JCS)", RFC 8785, DOI 10.17487/RFC8785, June 2020.</p>
+
+<p data-id="1198"><strong data-id="1199">[RFC8949]</strong> Bormann, C. and P. Hoffman, "Concise Binary Object Representation (CBOR)", STD 94, RFC 8949, DOI 10.17487/RFC8949, December 2020.</p>
+
+<p data-id="1200"><strong data-id="1201">[RFC9052]</strong> Schaad, J., "CBOR Object Signing and Encryption (COSE): Structures and Process", STD 96, RFC 9052, DOI 10.17487/RFC9052, August 2022.</p>
+
+<p data-id="1202"><strong data-id="1203">[RFC9110]</strong> Fielding, R., Ed., Nottingham, M., Ed., and J. Reschke, Ed., "HTTP Semantics", STD 97, RFC 9110, DOI 10.17487/RFC9110, June 2022.</p>
+
+<h2 data-id="1204">13.2. Informative References</h2>
+
+<p data-id="1205"><strong data-id="1206">[RFC6749]</strong> Hardt, D., Ed., "The OAuth 2.0 Authorization Framework", RFC 6749, DOI 10.17487/RFC6749, October 2012.</p>
+
+<p data-id="1207"><strong data-id="1208">[SPIFFE]</strong> Secure Production Identity Framework for Everyone (SPIFFE), https://spiffe.io/.</p>
+
+<p data-id="1209"><strong data-id="1210">[FIPS204]</strong> National Institute of Standards and Technology, "Module-Lattice-Based Digital Signature Standard (ML-DSA)", FIPS 204, August 2024.</p>
+
+<p data-id="1211"><strong data-id="1212">[FIPS205]</strong> National Institute of Standards and Technology, "Stateless Hash-Based Digital Signature Standard (SLH-DSA)", FIPS 205, August 2024.</p>
+
+<!-- ============================================================ -->
+<!-- APPENDIX A -->
+<!-- ============================================================ -->
+
+<h1 data-id="1213">Appendix A. Complete Envelope Examples</h1>
+
+<h2 data-id="1214">A.1. JWS Example</h2>
+
+<p data-id="1215"><strong data-id="1216">Step 1: Authorization Envelope (JSON)</strong></p>
+
+<pre data-id="1217">
+{
+  "gap_version": "1.4.1",
+  "envelope_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "agent_id": "urn:gap:agent:example:weather-bot-7",
+  "principal_id": "urn:gap:principal:example:user-alice",
+  "issued_at": "2026-04-25T15:30:00Z",
+  "expires_at": "2026-04-25T15:35:00Z",
+  "nonce": "dBjftJeZ4CVP-mB92K27uhbUJU1p",
+  "assurance_level": "domain-validated",
+  "target": "https://api.example.com/forecast",
+  "action": "query_weather",
+  "action_params": {
+    "city": "Grand Prairie",
+    "units": "imperial"
+  },
+  "signing_algorithm": "ES256",
+  "key_id": "agent-weather-bot-7-key-2026Q2"
+}
+</pre>
+
+<p data-id="1218"><strong data-id="1219">Step 2: JCS-Canonicalized Form</strong></p>
+
+<p data-id="1220">After applying JCS (RFC 8785), the canonical form is a single line with sorted keys, no whitespace:</p>
+
+<pre data-id="1221">
+{"action":"query_weather","action_params":{"city":"Grand Prairie","units":"imperial"},"agent_id":"urn:gap:agent:example:weather-bot-7","assurance_level":"domain-validated","envelope_id":"f47ac10b-58cc-4372-a567-0e02b2c3d479","expires_at":"2026-04-25T15:35:00Z","gap_version":"1.4.1","issued_at":"2026-04-25T15:30:00Z","key_id":"agent-weather-bot-7-key-2026Q2","nonce":"dBjftJeZ4CVP-mB92K27uhbUJU1p","principal_id":"urn:gap:principal:example:user-alice","signing_algorithm":"ES256","target":"https://api.example.com/forecast"}
+</pre>
+
+<p data-id="1222"><strong data-id="1223">Step 3: JWS Protected Header</strong></p>
+
+<pre data-id="1224">
+{
+  "alg": "ES256",
+  "kid": "agent-weather-bot-7-key-2026Q2",
+  "b64": false,
+  "crit": ["b64"],
+  "gap_ver": "1.4.1"
+}
+</pre>
+
+<p data-id="1225">Base64url-encoded Protected Header (illustrative):</p>
+
+<pre data-id="1226">
+eyJhbGciOiJFUzI1NiIsImtpZCI6ImFnZW50LXdlYXRoZXItYm90LTcta2V5LT
+IwMjZRMiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il0sImdhcF92ZXIiOiIx
+LjQuMSJ9
+</pre>
+
+<p data-id="1227"><strong data-id="1228">Step 4: JWS Compact Serialization (Detached Payload)</strong></p>
+
+<p data-id="1229">The JWS Compact Serialization with detached payload omits the payload segment (between the two dots):</p>
+
+<pre data-id="1230">
+eyJhbGciOiJFUzI1NiIsImtpZCI6ImFnZW50LXdlYXRoZXItYm90LTcta2V5LTIw
+MjZRMiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il0sImdhcF92ZXIiOiIxLjQu
+MSJ9..&lt;base64url-encoded ECDSA signature&gt;
+</pre>
+
+<p data-id="1231"><strong data-id="1232">Step 5: HTTP Request</strong></p>
+
+<pre data-id="1233">
+POST /forecast HTTP/1.1
+Host: enforcement-point.example.com
+Content-Type: application/gap+json
+GAP-Authorization: eyJhbGciOiJFUzI1Ni...&lt;detached JWS&gt;
+
+{"gap_version":"1.4.1","envelope_id":"f47ac10b-58cc-4372-a567
+-0e02b2c3d479","agent_id":"urn:gap:agent:example:weather-bot-7",
+"principal_id":"urn:gap:principal:example:user-alice",
+"issued_at":"2026-04-25T15:30:00Z",
+"expires_at":"2026-04-25T15:35:00Z",
+"nonce":"dBjftJeZ4CVP-mB92K27uhbUJU1p",
+"assurance_level":"domain-validated",
+"target":"https://api.example.com/forecast",
+"action":"query_weather",
+"action_params":{"city":"Grand Prairie","units":"imperial"},
+"signing_algorithm":"ES256",
+"key_id":"agent-weather-bot-7-key-2026Q2"}
+</pre>
+
+<h2 data-id="1234">A.2. COSE Example</h2>
+
+<p data-id="1235">The same logical envelope expressed using COSE_Sign1 in CBOR diagnostic notation:</p>
+
+<pre data-id="1236">
+/ COSE_Sign1 /
+18([
+  / protected / &lt;&lt; {
+    / alg /  1: -7,          ; ES256
+    / kid /  4: h'6167656e742d776561746865722d626f742d372d
+                 6b65792d32303236513200',
+    / gap_ver / -65537: "1.4.1"
+  } &gt;&gt;,
+  / unprotected / {},
+  / payload / &lt;&lt;
+    {
+      "gap_version": "1.4.1",
+      "envelope_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "agent_id": "urn:gap:agent:example:weather-bot-7",
+      "principal_id": "urn:gap:principal:example:user-alice",
+      "issued_at": "2026-04-25T15:30:00Z",
+      "expires_at": "2026-04-25T15:35:00Z",
+      "nonce": "dBjftJeZ4CVP-mB92K27uhbUJU1p",
+      "assurance_level": "domain-validated",
+      "target": "https://api.example.com/forecast",
+      "action": "query_weather",
+      "action_params": {
+        "city": "Grand Prairie",
+        "units": "imperial"
+      },
+      "signing_algorithm": "ES256",
+      "key_id": "agent-weather-bot-7-key-2026Q2"
+    }
+  &gt;&gt;,
+  / signature / h'...(ECDSA P-256 signature bytes)...'
+])
+</pre>
+
+<p data-id="1237">Note: The payload above is shown in JSON diagnostic form for readability. In the actual COSE_Sign1 structure, the payload is the CBOR Deterministic Encoding of the envelope map with keys sorted in bytewise lexicographic order per Section 4.3.</p>
+
+<!-- ============================================================ -->
+<!-- APPENDIX B -->
+<!-- ============================================================ -->
+
+<h1 data-id="1238">Appendix B. Normative Changes from v1.4.0</h1>
+
+<table data-id="1239" class="change-table">
+    <tr data-id="1240">
+        <th data-id="1241" style="width: 20%;">Section</th>
+        <th data-id="1242" style="width: 40%;">Change</th>
+        <th data-id="1243" style="width: 40%;">Rationale</th>
+    </tr>
+    <tr data-id="1244">
+        <td data-id="1245">4 (Canonicalization)</td>
+        <td data-id="1246">Added mandatory JCS (RFC 8785) for JSON and CBOR Deterministic Encoding (RFC 8949) for CBOR</td>
+        <td data-id="1247">Eliminates signature ambiguity from non-deterministic serialization; ensures cross-implementation interoperability</td>
+    </tr>
+    <tr data-id="1248">
+        <td data-id="1249">5.2 (JWS Signing)</td>
+        <td data-id="1250">Mandated detached payload with <code data-id="1251">b64:false</code> per RFC 7797; defined JWS Signing Input formula</td>
+        <td data-id="1252">Prevents double-encoding; ensures EP can independently reconstruct canonical form from received envelope</td>
+    </tr>
+    <tr data-id="1253">
+        <td data-id="1254">5.3 (COSE Signing)</td>
+        <td data-id="1255">Clarified COSE_Sign1 payload inclusion by default, with detachment only when deployment profile specifies</td>
+        <td data-id="1256">Resolves ambiguity in COSE payload handling across implementations</td>
+    </tr>
+    <tr data-id="1257">
+        <td data-id="1258">5.4 (Signing Scope)</td>
+        <td data-id="1259">Expanded scope to all 13 REQUIRED fields + 4 OPTIONAL fields; prohibited partial inclusion</td>
+        <td data-id="1260">Prevents parameter-stripping attacks where attacker modifies unsigned fields</td>
+    </tr>
+    <tr data-id="1261">
+        <td data-id="1262">6.2 (action_params)</td>
+        <td data-id="1263">Added max depth (8), max size (64 KiB), type restrictions, circular-reference prohibition, key-uniqueness requirement</td>
+        <td data-id="1264">Prevents resource exhaustion during parsing and canonicalization; limits attack surface</td>
+    </tr>
+    <tr data-id="1265">
+        <td data-id="1266">7 (Assurance Levels)</td>
+        <td data-id="1267">Added four enumerated values with precise semantics, normative validation rules, and downgrade-resistance mechanism</td>
+        <td data-id="1268">Prevents free-form string abuse and silent assurance-level downgrade</td>
+    </tr>
+    <tr data-id="1269">
+        <td data-id="1270">8.1 (Nonce)</td>
+        <td data-id="1271">Raised entropy floor to 128 bits; mandated CSPRNG; prohibited predictable sources</td>
+        <td data-id="1272">Prevents birthday-bound collisions and nonce-prediction attacks</td>
+    </tr>
+    <tr data-id="1273">
+        <td data-id="1274">8.2 (Replay Window)</td>
+        <td data-id="1275">Defined RECOMMENDED 300-second window with minimum 60 seconds and maximum 3,600 seconds</td>
+        <td data-id="1276">Provides concrete, interoperable replay protection with bounds for cache sizing</td>
+    </tr>
+    <tr data-id="1277">
+        <td data-id="1278">9 (Algorithm Agility)</td>
+        <td data-id="1279">Added algorithm registry with lifecycle states, mandatory-to-implement suites (ES256, EdDSA), deprecation lifecycle, and post-quantum roadmap</td>
+        <td data-id="1280">Future-proofs protocol against cryptographic evolution; ensures baseline interoperability</td>
+    </tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- APPENDIX C -->
+<!-- ============================================================ -->
+
+<h1 data-id="1281">Appendix C. JSON Schema for Authorization Envelope</h1>
+
+<p data-id="1282">The following JSON Schema (draft-07) defines the structure and constraints for the GAP Authorization Envelope:</p>
+
+<pre data-id="1283">
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gap-protocol.org/schema/envelope/v1.4.1",
+  "title": "GAP Authorization Envelope v1.4.1",
+  "description": "JSON Schema for the Generic Authorization Protocol
+    Authorization Envelope. Note: maximum nesting depth of
+    action_params (8 levels) cannot be enforced by JSON Schema
+    alone and MUST be validated by the implementation.",
+  "type": "object",
+  "required": [
+    "gap_version",
+    "envelope_id",
+    "agent_id",
+    "principal_id",
+    "issued_at",
+    "expires_at",
+    "nonce",
+    "assurance_level",
+    "target",
+    "action",
+    "action_params",
+    "signing_algorithm",
+    "key_id"
+  ],
+  "properties": {
+    "gap_version": {
+      "type": "string",
+      "const": "1.4.1",
+      "description": "GAP protocol version."
+    },
+    "envelope_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "description": "UUID v4 uniquely identifying this envelope."
+    },
+    "agent_id": {
+      "type": "string",
+      "format": "uri",
+      "description": "URI identifying the Agent."
+    },
+    "principal_id": {
+      "type": "string",
+      "format": "uri",
+      "description": "URI identifying the Principal."
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 timestamp of envelope creation (UTC)."
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 timestamp of envelope expiry (UTC).
+        MUST be after issued_at."
+    },
+    "nonce": {
+      "type": "string",
+      "minLength": 22,
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "description": "Base64url-encoded nonce with at least 128 bits
+        of entropy. A 128-bit value produces a 22-character string."
+    },
+    "assurance_level": {
+      "type": "string",
+      "enum": [
+        "self-asserted",
+        "domain-validated",
+        "organization-validated",
+        "hardware-bound"
+      ],
+      "description": "Assurance level of the Agent's identity
+        verification."
+    },
+    "target": {
+      "type": "string",
+      "format": "uri",
+      "description": "URI of the target resource server or endpoint."
+    },
+    "action": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "String identifier for the requested action."
+    },
+    "action_params": {
+      "type": "object",
+      "description": "Action-specific parameters. Max serialized
+        size: 65536 bytes. Max nesting depth: 8 levels
+        (enforced by implementation, not schema)."
+    },
+    "signing_algorithm": {
+      "type": "string",
+      "description": "Algorithm identifier (JWA name or COSE ID)."
+    },
+    "key_id": {
+      "type": "string",
+      "description": "Identifier of the signing key (kid)."
+    },
+    "delegation_chain": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Optional. Ordered array of delegation tokens."
+    },
+    "scope_constraints": {
+      "type": "object",
+      "description": "Optional. Additional scope restrictions."
+    },
+    "binding_metadata": {
+      "type": "object",
+      "description": "Optional. Transport or channel binding data."
+    },
+    "extensions": {
+      "type": "object",
+      "description": "Optional. Registered extension fields."
+    }
+  },
+  "additionalProperties": false
+}
+</pre>
+
+<p data-id="1284" style="margin-top: 24pt; text-align: center; font-size: 10pt; color: #666666;">— End of draft-chambers-gap-protocol-01 —</p>
+
+</body>
+</html>
